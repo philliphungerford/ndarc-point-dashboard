@@ -48,6 +48,10 @@ Data dictionaries are essential for data management. Many of them can be found i
 
 ![Alt text](images/data-dictionary.png "Screenshot of the data dictionary tab.")
 
+When you look up a search term:
+
+![Alt text](images/data-dictionary-example.png "Example of using the search feature.")
+
 ### 12. Acknowledgements
 
 ## Conclusion
