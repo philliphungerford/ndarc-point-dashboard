@@ -12,6 +12,10 @@ The Overview tab, gives an introduction to the paper and provides the metadata f
 ### 2. Measures
 The POINT study utilised various questionnaires relating to the different aspects of the participant's life. These measures are detailed here with relevant sources and clinical cut offs.
 
+The measures section was created and saved as a comma separareted value (.csv) and is read into the tab using the 'DT' library.
+
+![Alt text](screenshots/Measures.png?raw=true "Screenshot of the measures tab.")
+
 ### 3. Demographics
 The demographics tab shows baseline demographic information about the participants. It is divided into 4 boxes.
 
@@ -30,7 +34,13 @@ The demographics tab shows baseline demographic information about the participan
 ### 9. Substance Use
 
 ### 10. Medication Diary
-At each wave, a seven-day medication diary collected frequency and dose information on all consumed pain-related medicines, psychiatric medicines and prescribed sleep medicines. The measures, tools, and data domains were selected based on recommendations made by the Initiative on Methods, Measurement, and Pain Assessment in Clinical Trials (IMMPACT)
+At each wave, a seven-day medication diary collected frequency and dose information on all consumed pain-related medicines, psychiatric medicines and prescribed sleep medicines. The measures, tools, and data domains were selected based on recommendations made by the Initiative on Methods, Measurement, and Pain Assessment in Clinical Trials (IMMPACT).
+
+The medication diary has five boxes which are divided into three sections. The first row is a selector, to select a medication which is sourced from the data dictionary. The results are filtered only to show 'medication diary' and 'drug'. 
+
+The second row shows the proportion of users using a line plot with confidence intervals with the third box showing a table of summaries which comprise the plot. 
+
+The third row shows a line plot of mean OME across time with the fifth box showing the summary table for the corresponding plot. 
 
 ![Alt text](screenshots/Medication Diary.png?raw=true "Screenshot of the medication diary tab.")
 
