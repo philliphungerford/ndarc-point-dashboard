@@ -2,6 +2,7 @@
 A shiny app dashboard that shows a novel way of presenting longitudinal data. 
 
 ## Introduction
+This shiny app dashboard demonstrates a novel way to present your data to the world. This dashboard is based on a six year prospective study of those using pharmaceutical opioids to treat chronic non-cancer pain. 
 
 ## Sections
 The POINT project had distinct questions relating to various components of the participant's life. These were sectioned into separate tabs for exploration. 
@@ -18,6 +19,7 @@ The measures section was created and saved as a comma separareted value (.csv) a
 The demographics tab shows baseline demographic information about the participants. It is divided into 4 boxes.
 
 ![Alt text](screenshots/demographics.png?raw=true "Screenshot of the demographics tab.")
+
 ### 4. Pain
 
 ### 5. Physical Function
