@@ -1,0 +1,355 @@
+##############################################################################
+# Purpose: POINT data visualisation
+# Author: Phillip Hungerford
+# Date: 2020-06-19
+##############################################################################
+# This is a Shiny web application. You can run the application by clicking
+# the 'Run App' button above.
+#
+# Find out more about building applications with Shiny here:
+#
+#    http://shiny.rstudio.com/
+# 
+# Dashboard help: 
+# https://rstudio.github.io/shinydashboard/structure.html
+##############################################################################
+# Import libraries
+library(dplyr)
+library(haven)
+library(shiny)
+library(shinydashboard) # for tabs
+library(DT) # for displaying tables
+library(ggplot2)
+source("functions/section_02_plots.R")
+source("functions/section_10_plots.R")
+##############################################################################
+# load data
+#point_master <- read_sav("../versions/point-v0.9.1.9.sav")
+#point <- subset(point_master, followup==1) # remove attrition
+
+point_master <- read.csv("data/point-v0.9.1.13.csv", na.strings=c("", " "))
+point <- subset(point_master, followup=='Followup') # remove attrition
+
+# SECTION 2: Measures
+table_measures <- read.csv("data/measures-converted.csv")
+
+
+# SECTION 3: Demographics (use class() to check dtype)
+demographic_int <- c("Age" = "age", # int
+                      "Height" = "height", # int
+                      "Weight" =  "weight", # int
+                      "Body Mass Index" = "bmi", # int
+                      "Number of people living with" = "Live_Count") # int
+
+                     
+demographic_fac <- c("Sex" = "sex", # fact
+                     "Education" = "edu", # fac
+                     "Country of birth" = "cob", # fac
+                     "Indigenous" = "indig", # fac
+                     "Marital Status" = "maritalstatus", # fac
+                     " Employment" = "Employ", # fac
+                     "Weekly income" = "income_wk", # fac
+                     "Accomodation status" = "accom" # fac
+)
+
+# SECTION X : Data Dictionary
+data_dictionary <- read.csv("data/point-v0.9.1.9-dictionary.csv")
+
+# Medication vars 
+medications <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug"]
+medications <- as.character(medications)
+medications <- as.factor(unique(medications)) # 188 drugs
+##############################################################################
+# SECTION 1: USER INTERFACE
+##############################################################################
+# Define UI for application that draws a histogram
+ui <- dashboardPage(
+    #=========================================================================
+    # START DASHBOARD
+    #=========================================================================
+    # MAIN TITLE
+    dashboardHeader(title = "POINT Dashboard"),
+    #=========================================================================
+    ## Sidebar content
+    dashboardSidebar(
+        sidebarMenu(
+            # icons from (https://fontawesome.com/v4.7.0/icons/)
+            menuItem("Overview", tabName = "overview", icon = icon("columns")),#
+            menuItem("Measures", tabName = "measures", icon = icon("dashboard")),#
+            menuItem("Demographics", tabName = "demographics", icon = icon("address-book")),#
+            menuItem("Pain", tabName = "pain", icon = icon("heartbeat")),#
+            menuItem("Physical functioning", tabName = "physical", icon = icon("wheelchair")),#
+            menuItem("Treatment", tabName = "treatment", icon = icon("hospital-o")),# 
+            menuItem("Quality of life", tabName = "qol", icon = icon("heart")),#
+            menuItem("Mental health", tabName = "mental_health", icon = icon("smile-o")),#
+            menuItem("Substance use", tabName = "substance_use", icon = icon("toggle-on")),# or try eyedropper
+            menuItem("Medication diary", tabName = "med_diary", icon = icon("medkit")),#
+            menuItem("Data Dictionary", tabName = "dictionary", icon = icon("search")),#
+            menuItem("Acknowledgements", tabName = "acknowledgements", icon = icon("info"))#
+        )
+    ),
+    #=========================================================================
+    ## Body content
+    dashboardBody(
+        tabItems(
+            #-----------------------------------------------------------------
+            # SECTION ONE: Overview
+            tabItem(tabName = "overview",
+                    h2("Overview"),
+                    
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Info boxes for Overview
+                    fluidRow(
+                        # Participants = 1514
+                        valueBox(value = 1514, "Participants", icon = icon("male")),
+                        
+                        # Years collected
+                        valueBox(value = 6, "Years Collected", icon = icon("line-chart"), color = "purple"),
+                    )
+            ),
+            #-----------------------------------------------------------------
+            # SECTION TWO: MEASURES
+            tabItem(tabName = "measures",
+                    h2("Measures"),
+                    p("Here are the measures, tools, domains and time-points for data collection for the POINT study.
+                      Taken from Table 2 of the POINT Protocol."),
+                    # Display measures table
+                    DT::dataTableOutput("table_measures")
+            ),
+            #-----------------------------------------------------------------
+            # SECTION THREE: DEMOGRAPHICS
+            tabItem(tabName = "demographics",
+                    h2("Demographics"),
+                    
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    fluidRow(
+                        # box 1 and 2 for selection
+                        box(
+                            title = "Select continuous variable",
+                            "Select a variable from", br(), "",
+                            selectInput(inputId = "demographic_int_selection", label = "Variable:", choices = demographic_int)),
+                        box(
+                            title = "Select discrete variable",
+                            "Select a variable from", br(), "",
+                            selectInput(inputId = "demographic_fac_selection", label = "Variable:", choices = demographic_fac))
+                    ),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Info boxes for Overview
+                    fluidRow(
+                        # box 3 is the Histogram
+                        box(
+                            title = "Density plot",
+                            plotOutput("demographic_density", height = 250)),
+                        # box 4 is the summary
+                        box(
+                            title = "Pie chart",
+                            plotOutput("demographic_donut", height = 250))
+                    ),
+                    
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    fluidRow(
+                        # box 5 is the histogram
+                        box(
+                            title = "Histogram",
+                            plotOutput("demographic_histogram", height = 250)),
+                        # box 6 is the summary for pie chart
+                        box(
+                            title = "Summary plot",
+                            tableOutput("demographic_sum"))
+                    )
+                    
+            ),
+            #-----------------------------------------------------------------
+            # SECTION FOUR: PAIN
+            tabItem(tabName = "pain",
+                    h2("Pain Measures"),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Info boxes for Overview
+                    fluidRow(
+                        # BOX 1: Histogram of bar
+                        box(
+                            title = "Chronic conditions at baseline",
+                            plotOutput("pain_baseline", height = 250)),
+                        # BOX 2: Histogram of bar
+                        box(
+                            title = "Past 12m reported chronic conditions",
+                            plotOutput("pain_past12m", height = 250))
+                    ),
+                    
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    fluidRow(
+                        # BOX 3: Line graph BPI interference / severity
+                        box(
+                            title = "Histogram",
+                            plotOutput("pain_bpi_plot", height = 250)),
+                        
+                        # BOX 4: table of BPI interference / severity
+                        box(
+                            title = "Summary plot",
+                            tableOutput("pain_bpi_table"))
+                    )
+            ),
+            #-----------------------------------------------------------------
+            # SECTION FIVE: PHYSICAL FUNCTION
+            tabItem(tabName = "physical",
+                    h2("Physical Function Measures")
+            ),
+            #-----------------------------------------------------------------
+            # SECTION SIX: TREATMENT
+            tabItem(tabName = "treatment",
+                    h2("Treatment Received")
+            ),
+            #-----------------------------------------------------------------
+            # SECTION SEVEN: QOL
+            tabItem(tabName = "qol",
+                    h2("Quality of Life Assessment")
+            ),
+            #-----------------------------------------------------------------
+            # SECTION EIGHT: MENTAL HEALTH
+            tabItem(tabName = "mental_health",
+                    h2("Mental Health")
+            ),
+            #-----------------------------------------------------------------
+            # SECTION NINE: SUBSTANCE
+            tabItem(tabName = "substance_use",
+                    h2("Substance Use")
+            ),
+            #-----------------------------------------------------------------
+            # SECTION TEN: MEDICATION DIARY
+            tabItem(tabName = "med_diary",
+                    h2("Medication Diary"),
+                    p("Based on the seven day medication diary of participants,
+                      explore the medication use measured in oral morphine equivalent (OME),
+                      usage across the six years."),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    fluidRow(
+                        # box 3 is the medication selection
+                        box(
+                            title = "Select Medication",
+                            "Select a medication from", br(), "participant's medication diary.",
+                            selectInput("medication", "Variable:", medications))
+                    ),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Info boxes for Overview
+                    fluidRow(
+                        # box 1 is the medication summary
+                        box(
+                        title = "Proportion of users Plot",
+                        plotOutput("medication_plot", height = 250)),
+                        # box 2 is the plot
+                        box(
+                        title = "Proportion Summary",
+                        tableOutput("medication_proportions"))
+                    ),
+                   
+                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    fluidRow(
+                        # box 1 is the medication summary
+                        box(
+                            title = "Mean Oral Morphine Equivalent over study",
+                            plotOutput("medication_ome", height = 250)),
+                        # box 3 is the medication selection
+                        box(
+                            title = "OME Summary",
+                            tableOutput("medication_ome_summary"))
+                    )
+            ),
+            #-----------------------------------------------------------------
+            # Eleventh tab content: Data Dictionary
+            tabItem(tabName = "dictionary",
+                    h2("POINT Data Dictionary"),
+                    # Display measures table
+                    DT::dataTableOutput("data_dictionary")
+            ),       
+            #-----------------------------------------------------------------
+            # Eleventh tab content
+            tabItem(tabName = "acknowledgements",
+                    h2("Acknowledgements")
+            )
+            #-----------------------------------------------------------------
+        ) # tabItems
+    ) # body
+    #=========================================================================
+    # END DASHBOARD
+    #=========================================================================
+) # dashboard page
+
+##############################################################################
+# SECTION 2: SERVER
+##############################################################################
+# Define server logic required to draw a histogram
+server <- function(input, output) {
+    #=========================================================================
+    # Start server
+    #=========================================================================
+    # set seed for replicability
+    set.seed(122)
+    
+    #=========================================================================
+    # SECTION 2: MEASURES
+    output$table_measures = DT::renderDataTable({
+        DT::datatable(table_measures, options = list(lengthMenu = c(10, 20, 43), pageLength = 43))
+    })
+    
+    #=========================================================================
+    # SECTION 3: Demographics
+    #-------------------------------------------------------------------------
+    # PLOT 1: Density plot
+    output$demographic_density <- renderPlot({
+        density_plot(df = point, variable = input$demographic_int_selection)
+    })
+    #-------------------------------------------------------------------------
+    # PLOT 2: Donut
+    output$demographic_donut <- renderPlot({
+        donut_plot(df = point, variable = input$demographic_fac_selection)
+    })
+    #-------------------------------------------------------------------------
+    # PLOT 3: Histogram
+    output$demographic_histogram <- renderPlot({
+        histogram_plot(df = point, variable = input$demographic_int_selection)
+    })
+    #-------------------------------------------------------------------------
+    # PLOT 4: Summary of pie chart
+    output$demographic_sum <- renderTable({
+        donut_summary(point, input$demographic_fac_selection)
+    })
+    
+    #=========================================================================
+    # SECTION 10: medication diary
+    #-------------------------------------------------------------------------
+    # Proportions Summary
+    output$medication_proportions <- renderTable({
+        proportion_make(point, input$medication, outcome = "yes")
+    })
+    #-------------------------------------------------------------------------
+    # Proportion plot
+    output$medication_plot <- renderPlot({
+        proportion_plot(point, input$medication, outcome = "yes")
+    })
+    #-------------------------------------------------------------------------
+    # OME plot
+    output$medication_ome <- renderPlot({
+        ome_plot(point, input$medication)
+    })
+    #-------------------------------------------------------------------------
+    # OME Summary
+    output$medication_ome_summary <- renderTable({
+        ome_summary(point, input$medication)
+    })
+    #=========================================================================
+    # SECTION ELEVEN: Data Dictionary
+    output$data_dictionary = DT::renderDataTable({
+        DT::datatable(data_dictionary, options = list(lengthMenu = c(100, 500, 1000, nrow(data_dictionary)), pageLength = 100))
+    })
+    #=========================================================================
+    # End server
+    #=========================================================================
+}
+
+##############################################################################
+# SECTION 3: RUN APPLICATION
+##############################################################################
+shinyApp(ui = ui, server = server)
+##############################################################################
+################################### END ######################################
+##############################################################################
