@@ -32,6 +32,9 @@ The demographics tab shows baseline demographic information about the participan
 ### 10. Medication Diary
 
 ### 11. Data Dictionary
+Data dictionaries are essential for data management. Many of them can be found in word documents, excel sheets or are a part of software attributes for example in SPSS. Here, the data dictionary (saved as a csv) is called into the shiny app using the 'DT' library. Here, not only is the data dictionary loaded and available, the app can handle the 4000 + variables in this dataset. Furthermore, there is a search bar on the top right that searches for text within the dictionary across all columns. To supplement this feature, categories and subcategories were added in separate columns to aid those who are unfamiliar with the data to find relevant variables and their descriptions.
+
+![Alt text](screenshots/Data Dictionary.png?raw=true "Screenshot of the data dictionary tab.")
 
 ### 12. Acknowledgements
 
