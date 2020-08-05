@@ -262,7 +262,7 @@ ui <- dashboardPage(
                     DT::dataTableOutput("data_dictionary")
             ),       
             #-----------------------------------------------------------------
-            # Eleventh tab content
+            # Twelth tab content
             tabItem(tabName = "acknowledgements",
                     h2("Acknowledgements")
             )
