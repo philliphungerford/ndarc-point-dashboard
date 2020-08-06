@@ -33,7 +33,7 @@ donut_plot <- function(df, variable){
   # get baseline data
   tmp <- subset(df, time == 0)
   
-  tmp[,variable] <- as.integer(tmp[,variable])-1
+  #tmp[,variable] <- as.integer(tmp[,variable])-1
   
   tmp2 <- tmp %>% 
     group_by_at(variable) %>% 
@@ -45,13 +45,12 @@ donut_plot <- function(df, variable){
   tmp2[,3] <- round(tmp2[,3], 2)
   
   # Create donut plot
-  p <- ggplot(tmp2, aes(x = nrow(tmp2), y = prop, fill = tmp2[, variable])) +
+  p <- ggplot(tmp2, aes(x = nrow(tmp2), y = prop, fill = tmp2[, variable], color = tmp2[, variable])) +
     geom_bar(stat = "identity", color = "white") +
     coord_polar(theta = "y", start = 0) +
     #geom_text(aes(y = lab.ypos, label = prop), color = "white", size=0)+
     guides(fill=guide_legend(title="")) +
     theme_void()  # to make donut ->  + xlim(0.5, 2.5)
-  p
   return(p)
 }
 

@@ -27,7 +27,7 @@ source("functions/section_10_plots.R")
 #point_master <- read_sav("../versions/point-v0.9.1.9.sav")
 #point <- subset(point_master, followup==1) # remove attrition
 
-point_master <- read.csv("data/point-v0.9.1.13.csv", na.strings=c("", " "))
+point_master <- read.csv("data/point-v0.9.2.csv", na.strings=c("", " "))
 point <- subset(point_master, followup=='Followup') # remove attrition
 
 # SECTION 2: Measures
@@ -319,12 +319,12 @@ server <- function(input, output) {
     #-------------------------------------------------------------------------
     # Proportions Summary
     output$medication_proportions <- renderTable({
-        proportion_make(point, input$medication, outcome = "yes")
+        proportion_make(point, input$medication, outcome = "Yes")
     })
     #-------------------------------------------------------------------------
     # Proportion plot
     output$medication_plot <- renderPlot({
-        proportion_plot(point, input$medication, outcome = "yes")
+        proportion_plot(point, input$medication, outcome = "Yes")
     })
     #-------------------------------------------------------------------------
     # OME plot
