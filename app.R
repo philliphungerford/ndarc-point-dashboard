@@ -85,6 +85,7 @@ ui <- dashboardPage(
             menuItem("Substance use", tabName = "substance_use", icon = icon("toggle-on")),# or try eyedropper
             menuItem("Medication diary", tabName = "med_diary", icon = icon("medkit")),#
             menuItem("Data Dictionary", tabName = "dictionary", icon = icon("search")),#
+            menuItem("Published Papers", tabName = "published", icon = icon("file-word-o")),#
             menuItem("Acknowledgements", tabName = "acknowledgements", icon = icon("info"))#
         )
     ),
@@ -269,13 +270,18 @@ ui <- dashboardPage(
                     h2("POINT Data Dictionary"),
                     
                     # have two sub-tabs within the data dictionary tab
-                    tabsetPanel(position = "below",
+                    tabsetPanel(
                                 tabPanel("Data Dictionary", DT::dataTableOutput("data_dictionary")), 
                                 tabPanel("Variable Values", DT::dataTableOutput("values_dictionary"))
                     ),
-            ),       
+            ),
             #-----------------------------------------------------------------
-            # Twelth tab content
+            # Twelfth tab content
+            tabItem(tabName = "published",
+                    h2("Published Papers")
+            ),
+            #-----------------------------------------------------------------
+            # Thirteenth tab content
             tabItem(tabName = "acknowledgements",
                     h2("Acknowledgements")
             )
