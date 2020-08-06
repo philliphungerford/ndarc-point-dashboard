@@ -95,8 +95,7 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # SECTION ONE: Overview
             tabItem(tabName = "overview",
-                    h2("Overview"),
-                    
+                    h1("The Pain and Opioids In Treatment (POINT) study"),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Info boxes for Overview
                     fluidRow(
@@ -105,7 +104,17 @@ ui <- dashboardPage(
                         
                         # Years collected
                         valueBox(value = 6, "Years Collected", icon = icon("line-chart"), color = "purple"),
-                    )
+                    ),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    h2("Background"),
+                    p("Internationally, there is concern about the increased prescribing of pharmaceutical opioids for chronic non-cancer pain (CNCP). In part, this is related to limited knowledge about the long-term benefits and outcomes of opioid use for CNCP. There has also been increased injection of some pharmaceutical opioids by people who inject drugs, and for some patients, the development of problematic and/or dependent use. To date, much of the research on the use of pharmaceutical opioids among people with CNCP, have been clinical trials that have excluded patients with complex needs, and have been of limited duration (i.e. fewer than 12 weeks). The Pain and Opioids In Treatment (POINT) study is unique study that aims to: 1) examine patterns of opioid use in a cohort of patients prescribed opioids for CNCP; 2) examine demographic and clinical predictors of adverse events, including opioid abuse or dependence, medication diversion, other drug use, and overdose; and 3) identify factors predicting poor pain relief and other outcomes."),
+                    
+                    h2("Methods/Design"),
+                    p("The POINT cohort comprises around 1,500 people across Australia prescribed pharmaceutical opioids for CNCP. Participants will be followed-up at four time points over a two year period. POINT will collect information on demographics, physical and medication use history, pain, mental health, drug and alcohol use, non-adherence, medication diversion, sleep, and quality of life. Data linkage will provide information on medications and services from Medicare (Australia’s national health care scheme). Data on those who receive opioid substitution therapy, and on mortality, will be linked."),
+                    
+                    h2("Discussion"),
+                    p("This study will rigorously examine prescription opioid use among CNCP patients, and examine its relationship to important health outcomes. The extent to which opioids for chronic pain is associated with pain reduction, quality of life, mental and physical health, aberrant medication behavior and substance use disorders will be extensively examined. Improved understanding of the longer-term outcomes of chronic opioid therapy will direct community-based interventions and health policy in Australia and internationally. The results of this study will assist clinicians to better identify those patients who are at risk of adverse outcomes and who therefore require alternative treatment strategies.")
+                    
             ),
             #-----------------------------------------------------------------
             # SECTION TWO: MEASURES
