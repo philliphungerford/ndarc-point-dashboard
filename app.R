@@ -12,6 +12,12 @@
 # 
 # Dashboard help: 
 # https://rstudio.github.io/shinydashboard/structure.html
+#
+# Adding text to your shiny app
+# https://shiny.rstudio.com/tutorial/written-tutorial/lesson2/
+#
+# Icons:
+# https://fontawesome.com/v4.7.0/icons/
 ##############################################################################
 # Import libraries
 library(dplyr)
@@ -283,8 +289,15 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # Thirteenth tab content
             tabItem(tabName = "acknowledgements",
-                    h2("Acknowledgements")
-            )
+                    h2("Acknowledgements"),
+                    p("A special thanks to all of the research assistants, chief investigators and most of all the participants who have contributed to this work."),
+                    br(),
+                    em("This dashboard was made my Phillip Hungerford at the National Drug and Alcohol Research Centre (NDARC)"),
+                    br(),
+                    p("The National Drug and Alcohol Research Centre (NDARC) is a premier research institution in Sydney, Australia and is recognised internationally as a Research Centre of Excellence. NDARC was established at UNSW Sydney in May 1986 and officially opened in November 1987. The Centre is supported by funding from the Australian Government Department of Health under the Drug and Alcohol Program."),
+                    p("https://ndarc.med.unsw.edu.au"),
+                    img(src='ndarc.png', align = "bottom")
+                    )
             #-----------------------------------------------------------------
         ) # tabItems
     ) # body
