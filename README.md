@@ -10,6 +10,8 @@ The POINT project had distinct questions relating to various components of the p
 ### 1. Overview & Meta data (drafted)
 The Overview tab, gives an introduction to the paper and provides the metadata for familiarisation. 
 
+![Alt text](images/overview.png "Screenshot of the overview section.")
+
 ### 2. Measures (drafted)
 The POINT study utilised various questionnaires relating to the different aspects of the participant's life. These measures are detailed here with relevant sources and clinical cut offs.
 
@@ -52,6 +54,9 @@ When you look up a search term:
 
 ![Alt text](images/data-dictionary-example.png "Example of using the search feature.")
 
-### 12. Acknowledgements
+### 12. Published Papers
+This section showcases the published papers relating to the POINT dataset.
+
+### 13. Acknowledgements
 
 ## Conclusion
