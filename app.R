@@ -234,9 +234,7 @@ ui <- dashboardPage(
             # SECTION TEN: MEDICATION DIARY
             tabItem(tabName = "med_diary",
                     h2("Medication Diary"),
-                    p("Based on the seven day medication diary of participants,
-                      explore the medication use measured in oral morphine equivalent (OME),
-                      usage across the six years."),
+                    p("At each wave, a seven-day medication diary collected frequency and dose information on all consumed pain-related medicines, psychiatric medicines and prescribed sleep medicines. The measures, tools, and data domains were selected based on recommendations made by the Initiative on Methods, Measurement, and Pain Assessment in Clinical Trials (IMMPACT). Based on the seven day medication diary of participants, explore the medication use measured in oral morphine equivalent (OME), usage across the six years."),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     fluidRow(
                         # box 3 is the medication selection
