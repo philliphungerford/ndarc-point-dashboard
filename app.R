@@ -258,8 +258,12 @@ ui <- dashboardPage(
             # Eleventh tab content: Data Dictionary
             tabItem(tabName = "dictionary",
                     h2("POINT Data Dictionary"),
-                    # Display measures table
-                    DT::dataTableOutput("data_dictionary")
+                    
+                    # have two sub-tabs within the data dictionary tab
+                    tabsetPanel(position = "below",
+                                tabPanel("Data Dictionary", DT::dataTableOutput("data_dictionary")), 
+                                tabPanel("Variable Values", DT::dataTableOutput("values_dictionary"))
+                    ),
             ),       
             #-----------------------------------------------------------------
             # Twelth tab content
