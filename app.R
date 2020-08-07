@@ -33,7 +33,7 @@ source("functions/section_10_plots.R")
 #point_master <- read_sav("../versions/point-v0.9.1.9.sav")
 #point <- subset(point_master, followup==1) # remove attrition
 
-point_master <- read.csv("data/point-v0.9.2.csv", na.strings=c("", " "))
+point_master <- read.csv("data/point-v0.9.4.csv", na.strings=c("", " "))
 point <- subset(point_master, followup=='Followup') # remove attrition
 
 # SECTION 2: Measures
@@ -59,7 +59,9 @@ demographic_fac <- c("Sex" = "sex", # fact
 )
 
 # SECTION X : Data Dictionary
-data_dictionary <- read.csv("data/point-v0.9.1.9-dictionary.csv")
+data_dictionary <- read.csv("data/point-v0.9.4-dictionary-only-complete.csv")
+values_dictionary <- read.csv("data/point-v0.9.4-dictionary-values.csv", na.strings=c(""))
+values_dictionary$Value <- zoo::na.locf(values_dictionary$Value)
 
 # Medication vars 
 medications <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug"]
@@ -370,6 +372,9 @@ server <- function(input, output) {
     # SECTION ELEVEN: Data Dictionary
     output$data_dictionary = DT::renderDataTable({
         DT::datatable(data_dictionary, options = list(lengthMenu = c(100, 500, 1000, nrow(data_dictionary)), pageLength = 100))
+    })
+    output$values_dictionary = DT::renderDataTable({
+        DT::datatable(values_dictionary, options = list(lengthMenu = c(100, 500, 1000, nrow(values_dictionary)), pageLength = 100))
     })
     #=========================================================================
     # End server
