@@ -3,15 +3,27 @@
 # Author: Phillip Hungerford
 # Date: 2020-06-19
 ##############################################################################
-percent_ci <- function(df, name, var, outcome="Yes", time_ind=0){
+percent_ci <- function(df, variable, outcome="Yes", time_ind=0){
+  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  # PURPOSE:
+  #     Calculate the percent and 95% confidence intervals for a given variable
+  #
+  # INPUTS:
+  #     df: dataframe with variableiables
+  #     variable: variable of which to calculate density plot
+  #
+  # Returns: 
+  #     estimate: the proportion calculated
+  #
+  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   df <- subset(df, time == time_ind)
   df <- df[!is.na(df$totalopioiddose), ]
   # pci <- percent_ci(df, "Male", "T1_sex", outcome="Male")
   df <- as.data.frame(df)
-  tmp <- df[,var]
+  tmp <- df[,variable]
   
   # Calculate the p and se
-  observed <- sum(df[, var] == outcome, na.rm=T)
+  observed <- sum(df[, variable] == outcome, na.rm=T)
   n <- length(tmp)
   
   # calculate the proportion
@@ -31,20 +43,18 @@ percent_ci <- function(df, name, var, outcome="Yes", time_ind=0){
   if (upper > 100){ upper <- 100 }
   # print results
   result <- c(estimate, lower, upper, time_ind, observed, n)
-  #result <- paste0(estimate, " (", lower, "-", upper, ")")
-  
   # return results
   return(result)
 }
 
 proportion_make <- function(df, variable, outcome = "yes"){
   ##############################################################################
-  t0 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=0)
-  t1 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=1)
-  t2 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=2)
-  t3 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=3)
-  t4 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=4)
-  t5 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=5)
+  t0 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=0)
+  t1 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=1)
+  t2 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=2)
+  t3 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=3)
+  t4 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=4)
+  t5 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=5)
   
   tall <- as.data.frame(rbind(t0,t1,t2,t3,t4,t5))
   names(tall)[names(tall) == "V1"] <- 'Proportion'
@@ -62,12 +72,12 @@ proportion_make <- function(df, variable, outcome = "yes"){
 
 proportion_plot <- function(df, variable, outcome = "yes"){
   ##############################################################################
-  t0 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=0)
-  t1 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=1)
-  t2 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=2)
-  t3 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=3)
-  t4 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=4)
-  t5 <- percent_ci(df, variable, variable, outcome=outcome, time_ind=5)
+  t0 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=0)
+  t1 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=1)
+  t2 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=2)
+  t3 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=3)
+  t4 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=4)
+  t5 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=5)
   
   tall <- as.data.frame(rbind(t0,t1,t2,t3,t4,t5))
   names(tall)[names(tall) == "V1"] <- 'estimate'
