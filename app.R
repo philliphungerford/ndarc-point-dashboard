@@ -202,7 +202,7 @@ ui <- dashboardPage(
                     fluidRow(
                         # BOX 3: Line graph BPI interference / severity
                         box(
-                            title = "Histogram",
+                            title = "Brief Pain Inventory: Interference & Severity",
                             plotOutput("pain_bpi_plot", height = 250)),
                         
                         # BOX 4: table of BPI interference / severity
