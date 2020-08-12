@@ -26,7 +26,10 @@ library(shiny)
 library(shinydashboard) # for tabs
 library(DT) # for displaying tables
 library(ggplot2)
+
+# functions for plots
 source("functions/section_02_plots.R")
+source("functions/section_04_plots.R")
 source("functions/section_10_plots.R")
 ##############################################################################
 # load data
