@@ -3,60 +3,44 @@
 # Author: Phillip Hungerford
 # Date: 2020-07-30
 ##############################################################################
-# Functions
-percent_ci <- function(df, variable){
+# PLOT 1: Bar chart of baseline pain
+# This is a bar plot of baseline presentation of chronic pain problems. 
+
+pain_baseline_plot <- function(){
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # PURPOSE:
-  #     Calculate the percent and 95% confidence intervals for a given variable
+  #     Creates bar plot of baseline reported chronic conditions
+  #
+  # REQUIREMENTS: 
+  #     summary_table function
   #
   # INPUTS:
   #     df: dataframe with variableiables
-  #     variable: variable of which to calculate density plot
   #
   # Returns: 
-  #     estimate: the proportion calculated
+  #     p: bar plot
   #
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # Make sure df is a dataframe
-  df <- as.data.frame(df)
-  
-  # Extract vector of desired variable
-  tmp <- df[,variable]
-  
-  # Calculate the p and se
-  observed <- sum(df[, variable] == 'Yes', na.rm=T)
-  n <- length(tmp)
-  
-  # Calculate the proportion
-  p <- ( observed / n) * 100
-  
-  # standard error = proportion of outcome 1 * proportion of outcome 2 / n
-  se <- sqrt(p * (100 - p) / n)
-  
-  ## 2. Create % (95% CI)
-  estimate <- round(p, 2)
-  lower <- round(p - (1.96*se), 2)
-  upper <- round(p + (1.96*se), 2)
-  
-  # Conditionals for small numbers
-  if (lower < 0){ lower <- 0 }
-  if (upper > 100){ upper <- 100 }
 
-  # return results
-  return(estimate)
+  return()
 }
 
-summary_table <- function(df){
+#-------------------------------------------------------------------------------
+# PLOT 2: Line plot of past 12m pain over time 
+# This plot shows past 12m reporting of pain conditions over time. 
+pain_past12m_plot <- function(df){
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # PURPOSE:
-  #     Creates summary table of values defined within (chronic variables)
+  #     Creates line plot of past 12m reported chronic conditions
+  #
+  # REQUIREMENTS: 
+  #     summary_table function
   #
   # INPUTS:
   #     df: dataframe with variableiables
-  #     variable: variable of which to calculate density plot
   #
   # Returns: 
-  #     estimate: the proportion calculated
+  #     p: line plot
   #
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   chronic_variables <- c(
@@ -81,88 +65,21 @@ summary_table <- function(df){
     'Generalised'
   )
   
-  b <- subset(tmp, time == 0)
-  t0 <- as.data.frame(sapply(chronic_variables, FUN = percent_ci, df=b))
-  names(t0)[1] <- "t0"
-  
-  b <- subset(tmp, time == 1)
-  t1 <- as.data.frame(sapply(chronic_variables, FUN = percent_ci, df=b))
-  names(t1)[1] <- "t1"
-  
-  b <- subset(tmp, time == 2)
-  t2 <- as.data.frame(sapply(chronic_variables, FUN = percent_ci, df=b))
-  names(t2)[1] <- "t2"
-  
-  b <- subset(tmp, time == 3)
-  t3 <- as.data.frame(sapply(chronic_variables, FUN = percent_ci, df=b))
-  names(t3)[1] <- "t3"
-  
-  b <- subset(tmp, time == 4)
-  t4 <- as.data.frame(sapply(chronic_variables, FUN = percent_ci, df=b))
-  names(t4)[1] <- "t4"
-  
-  b <- subset(tmp, time == 5)
-  t5 <- as.data.frame(sapply(chronic_variables, FUN = percent_ci, df=b))
-  names(t5)[1] <- "t5"
-  
-  tall <- cbind(t0,t1,t2,t3,t4,t5)
-  tall$Condition <- chronic_names
-  return(tall)
-}
-
-
-
-##############################################################################
-# PLOT 1: Bar chart of baseline pain
-# This is a bar plot of baseline presentation of chronic pain problems. 
-
-pain_baseline_plot <- function(df){
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # PURPOSE:
-  #     Creates bar plot of baseline reported chronic conditions
-  #
-  # REQUIREMENTS: 
-  #     summary_table function
-  #
-  # INPUTS:
-  #     df: dataframe with variableiables
-  #
-  # Returns: 
-  #     p: bar plot
-  #
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  
   # Creates summary table and plots
-  tmp <- summary_table(df)
+  t <- lapply(chronic_variables, util_percent_ci_all, times=0:5, df=df, outcome="Yes")
+  t2 <- bind_rows(t, .id = "column_label")
   
   # Create plot from summary table data
-  p <- ggplot(data = tmp, aes(x = Condition, y = t0, fill = Condition)) + 
-    geom_col() + 
-    ylab(" Proportion (%)") + 
-    theme_minimal() +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank(),
-          axis.ticks.x=element_blank()) 
+  y_label <- paste0("Proportion of POINT Users")
+  p <- ggplot(data=t2, aes(x=time, y=estimate, ymin=lower, ymax=upper, group=variable))+
+    geom_line(aes(color=variable)) +
+    geom_point(aes(color=variable)) +
+    geom_ribbon(alpha = 0.3, aes(fill=variable)) +
+    labs(title="",
+         x = "Time",
+         y = y_label)
+  
   return(p)
-  }
-#-------------------------------------------------------------------------------
-# PLOT 2: Line plot of past 12m pain over time 
-# This plot shows past 12m reporting of pain conditions over time. 
-pain_past12m <- function(){
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  # PURPOSE:
-  #     Creates line plot of past 12m reported chronic conditions
-  #
-  # REQUIREMENTS: 
-  #     summary_table function
-  #
-  # INPUTS:
-  #     df: dataframe with variableiables
-  #
-  # Returns: 
-  #     p: line plot
-  #
-  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 }
 
 # PLOT 3: Line graph of BPI interference and severity
