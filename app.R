@@ -28,6 +28,7 @@ library(DT) # for displaying tables
 library(ggplot2)
 
 # functions for plots
+source("functions/utilities.R")
 source("functions/section_02_plots.R")
 source("functions/section_04_plots.R")
 source("functions/section_10_plots.R")
@@ -36,8 +37,8 @@ source("functions/section_10_plots.R")
 #point_master <- read_sav("../versions/point-v0.9.1.9.sav")
 #point <- subset(point_master, followup==1) # remove attrition
 
-point_master <- read.csv("data/point-v0.9.4.csv", na.strings=c("", " "))
-point <- subset(point_master, followup=='Followup') # remove attrition
+point_master <- read.csv("data/point-v0.9.5.csv", na.strings=c("", " "))
+point <- subset(point_master, followup=='followed up') # remove attrition N=7578
 
 # SECTION 2: Measures
 table_measures <- read.csv("data/measures-converted.csv")
@@ -62,14 +63,14 @@ demographic_fac <- c("Sex" = "sex", # fact
 )
 
 # SECTION X : Data Dictionary
-data_dictionary <- read.csv("data/point-v0.9.4-dictionary-only-complete.csv")
-values_dictionary <- read.csv("data/point-v0.9.4-dictionary-values.csv", na.strings=c(""))
-values_dictionary$Value <- zoo::na.locf(values_dictionary$Value)
+data_dictionary <- read.csv("data/point-v0.9.5-dictionary.csv")
+values_dictionary <- read.csv("data/point-v0.9.5-dictionary-values.csv", na.strings=c(""))
+values_dictionary$Variable <- zoo::na.locf(values_dictionary$Variable)
 
 # Medication vars 
 medications <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug"]
 medications <- as.character(medications)
-medications <- as.factor(unique(medications)) # 188 drugs
+medications <- as.factor(unique(medications)) # 187 drugs
 ##############################################################################
 # SECTION 1: USER INTERFACE
 ##############################################################################
@@ -349,6 +350,12 @@ server <- function(input, output) {
         donut_summary(point, input$demographic_fac_selection)
     })
     
+    #=========================================================================
+    # SECTION 4: Pain
+    #-------------------------------------------------------------------------
+    output$pain_past12m <- renderPlot({
+        pain_past12m_plot(df=point)
+    })
     #=========================================================================
     # SECTION 10: medication diary
     #-------------------------------------------------------------------------
