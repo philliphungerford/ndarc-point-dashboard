@@ -69,16 +69,22 @@ pain_past12m_plot <- function(df){
   t <- lapply(chronic_variables, util_percent_ci_all, times=0:5, df=df, outcome="Yes")
   t2 <- bind_rows(t, .id = "column_label")
   
+  t2$Condition <- ""
+  for (i in 1:length(chronic_names)){
+    t2$Condition[t2$variable == chronic_variables[i]] <- chronic_names[i]
+  }
+
+  
   # Create plot from summary table data
   y_label <- paste0("Proportion of POINT Users")
-  p <- ggplot(data=t2, aes(x=time, y=estimate, ymin=lower, ymax=upper, group=variable))+
-    geom_line(aes(color=variable)) +
-    geom_point(aes(color=variable)) +
-    geom_ribbon(alpha = 0.3, aes(fill=variable)) +
+  p <- ggplot(data=t2, aes(x=time, y=estimate, ymin=lower, ymax=upper, group=Condition))+
+    geom_ribbon(alpha = 0.3, aes(fill=Condition), show.legend = T) +
+    geom_line(aes(color=Condition)) +
+    geom_point(aes(color=Condition)) +
     labs(title="",
          x = "Time",
          y = y_label)
-  
+  p
   return(p)
 }
 
