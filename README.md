@@ -31,7 +31,11 @@ The pain section summarises the chronic pain conditions that participants self r
 
 ### 6. Treatment (to do)
 
-### 7. Quality of Life (drafted)
+### 7. Quality of Life (completed)
+This section was based on two questions asked about quality of life and health satisfaction. Numbers were summarised into proportions over time. 
+
+![Screenshot of the quality-of-life section.](images/quality-of-life.png "Screenshot of the quality of life section.")
+
 
 ### 8. Mental Health(to do)
 
