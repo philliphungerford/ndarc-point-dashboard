@@ -58,9 +58,9 @@ donut_plot <- function(df, variable){
   #tmp[,variable] <- as.integer(tmp[,variable])-1
   
   tmp2 <- tmp %>% 
-    group_by_at(variable) %>% 
-    summarise(n = n()) %>% 
-    mutate(prop = n / sum(n))
+    dplyr::group_by_at(variable) %>% 
+    dplyr::summarise(n = n()) %>% 
+    dplyr::mutate(prop = n / sum(n))
   
   tmp2 <- as.data.frame(tmp2)
   
@@ -128,9 +128,9 @@ donut_summary <- function(df, variable){
   tmp <- subset(df, time == 0)
   
   tmp2 <- tmp %>% 
-    group_by_at(variable) %>% 
-    summarise(n = n()) %>% 
-    mutate(prop = n / sum(n))
+    dplyr::group_by_at(variable) %>% 
+    dplyr::summarise(n = n()) %>% 
+    dplyr::mutate(prop = n / sum(n))
   
   tmp2 <- as.data.frame(tmp2)
   
