@@ -353,6 +353,12 @@ server <- function(input, output) {
     #=========================================================================
     # SECTION 4: Pain
     #-------------------------------------------------------------------------
+    # PLOT 1: BASELINE CHRONIC PAIN CONDITIONS
+    output$pain_baseline <- renderPlot({
+        pain_baseline_plot(df=point)
+    })
+    
+    # PLOT 2: PAST 12m CHRONIC PAIN CONDITIONS
     output$pain_past12m <- renderPlot({
         pain_past12m_plot(df=point)
     })
