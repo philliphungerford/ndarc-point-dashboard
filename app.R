@@ -30,7 +30,13 @@ library(ggplot2)
 # functions for plots
 source("functions/utilities.R")
 source("functions/section_02_plots.R")
+#3
 source("functions/section_04_plots.R")
+#5
+#6
+source("functions/section_07_plots.R")
+#8
+#9
 source("functions/section_10_plots.R")
 ##############################################################################
 # load data
@@ -224,7 +230,23 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # SECTION SEVEN: QOL
             tabItem(tabName = "qol",
-                    h2("Quality of Life Assessment")
+                    h2("Quality of Life Assessment"),
+                    p("The following questions ask how you feel about your quality of life, health, or other areas of your life. I will read out each question to you, along with the response options. Please choose the answer that appears most appropriate. If you are unsure about which response to give to a question, the first response you think of is often the best one."),
+                    br(),
+                    p(" Please keep in mind your standards, hopes, pleasures and concerns. We ask that you think about your life in the last four weeks."),
+                    br(),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Info boxes for Overview
+                    fluidRow(
+                        # BOX 1: Quality of life plot
+                        box(
+                            title = "How would you rate your quality of life?",
+                            plotOutput("qol_q1", height = 500)),
+                        # BOX 2: Health satisfaction plot
+                        box(
+                            title = "How satisfied are you with your health?",
+                            plotOutput("qol_q2", height = 500))
+                    )
             ),
             #-----------------------------------------------------------------
             # SECTION EIGHT: MENTAL HEALTH
@@ -371,6 +393,25 @@ server <- function(input, output) {
     # Box 4: BPI summary
     output$pain_bpi_t <- renderTable({
         pain_bpi_tbl(df=point)
+    })
+    #=========================================================================
+    # SECTION 05: Physical Function
+    #-------------------------------------------------------------------------
+    
+    #=========================================================================
+    # SECTION 06: Treatment
+    #-------------------------------------------------------------------------
+    
+    #=========================================================================
+    # SECTION 07: Quality of life
+    #-------------------------------------------------------------------------
+    # PLOT 1: Quality of life
+    output$qol_q1 <- renderPlot({
+        qol_q1_plot(df=point)
+    })
+    # PLOT 2: Health satisfaction
+    output$qol_q2 <- renderPlot({
+        qol_q2_plot(df=point)
     })
     #=========================================================================
     # SECTION 10: medication diary
