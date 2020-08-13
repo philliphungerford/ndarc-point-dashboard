@@ -203,12 +203,12 @@ ui <- dashboardPage(
                         # BOX 3: Line graph BPI interference / severity
                         box(
                             title = "Brief Pain Inventory: Interference & Severity",
-                            plotOutput("pain_bpi_plot", height = 250)),
+                            plotOutput("pain_bpi_p", height = 250)),
                         
                         # BOX 4: table of BPI interference / severity
                         box(
-                            title = "Summary plot",
-                            tableOutput("pain_bpi_table"))
+                            title = "Brief Pain Inventory Summaries over Time",
+                            tableOutput("pain_bpi_t"))
                     )
             ),
             #-----------------------------------------------------------------
@@ -296,7 +296,7 @@ ui <- dashboardPage(
                     h2("Acknowledgements"),
                     p("A special thanks to all of the research assistants, chief investigators and most of all the participants who have contributed to this work."),
                     br(),
-                    em("This dashboard was made my Phillip Hungerford at the National Drug and Alcohol Research Centre (NDARC)"),
+                    em("This dashboard was made my Phillip Hungerford at the National Drug and Alcohol Research Centre (NDARC). More details about the code used to make this dashboard can be found on GitHub (https://github.com/philliphungerford/ndarc-point-dashboard)"),
                     br(),
                     p("The National Drug and Alcohol Research Centre (NDARC) is a premier research institution in Sydney, Australia and is recognised internationally as a Research Centre of Excellence. NDARC was established at UNSW Sydney in May 1986 and officially opened in November 1987. The Centre is supported by funding from the Australian Government Department of Health under the Drug and Alcohol Program."),
                     p("https://ndarc.med.unsw.edu.au"),
@@ -361,6 +361,16 @@ server <- function(input, output) {
     # PLOT 2: PAST 12m CHRONIC PAIN CONDITIONS
     output$pain_past12m <- renderPlot({
         pain_past12m_plot(df=point)
+    })
+    
+    # PLOT 3: BPI plot
+    output$pain_bpi_p <- renderPlot({
+        pain_bpi_plot(df=point)
+    })
+    
+    # Box 4: BPI summary
+    output$pain_bpi_t <- renderTable({
+        pain_bpi_tbl(df=point)
     })
     #=========================================================================
     # SECTION 10: medication diary
