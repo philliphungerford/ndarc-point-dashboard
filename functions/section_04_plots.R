@@ -6,7 +6,7 @@
 # PLOT 1: Bar chart of baseline pain
 # This is a bar plot of baseline presentation of chronic pain problems. 
 
-pain_baseline_plot <- function(){
+pain_baseline_plot <- function(df){
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # PURPOSE:
   #     Creates bar plot of baseline reported chronic conditions
@@ -21,8 +21,59 @@ pain_baseline_plot <- function(){
   #     p: bar plot
   #
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  chronic_variables <- c(
+    'Arth_12m',
+    'Back_12m',
+    'Head_12m',
+    'Visc_12m',
+    'Fibro_12m',
+    'Cmplx_12m',
+    'Shing_12m',
+    'Gen_Pain_12m'
+  )
+  
+  chronic_names <- c(
+    'Arthritis',
+    'Back or neck',
+    'Severe headaches',
+    'Visceral',
+    'Fibromyalgia',
+    'Complex regional',
+    'Shingles',
+    'Generalised'
+  )
 
-  return()
+  # select chronic pain variables
+  tmp <- df %>% select(time, all_of(chronic_variables))
+  
+  #subset for baseline only 
+  tmp <- tmp[tmp$time==0, ]
+
+  tmp <- tmp %>% mutate_at(chronic_variables, as.numeric)-1
+  
+  # get proportions
+  t <- round((colSums(tmp, na.rm=T) / nrow(tmp))*100,2)
+  
+  t <-t[2:9]
+  t <- as.data.frame(t)
+  
+  library(data.table)
+  t <- setDT(t, keep.rownames = TRUE)[]
+  
+  t$Condition <- ""
+  for (i in 1:length(chronic_names)){
+    t$Condition[t$rn == chronic_variables[i]] <- chronic_names[i]
+  }
+  
+    
+  p <- 
+    ggplot(t, aes(x=Condition, weight=t, fill=Condition)) + 
+    geom_bar() + 
+    ylab("Proportion of POINT participants (%)") + 
+    theme(axis.title.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank()) + ylim(0,100)
+  return(p)
 }
 
 #-------------------------------------------------------------------------------
@@ -83,8 +134,8 @@ pain_past12m_plot <- function(df){
     geom_point(aes(color=Condition)) +
     labs(title="",
          x = "Time",
-         y = y_label)
-  p
+         y = y_label) + 
+    ylim(0,100)
   return(p)
 }
 
