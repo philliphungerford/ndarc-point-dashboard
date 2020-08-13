@@ -140,7 +140,7 @@ pain_past12m_plot <- function(df){
 }
 
 # PLOT 3: Line graph of BPI interference and severity
-pain_bpi_plot <- function(){
+pain_bpi_plot <- function(df){
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   # PURPOSE:
   #     Creates line plot of BPI severity and interference over time
@@ -155,11 +155,89 @@ pain_bpi_plot <- function(){
   #     p: line plot
   #
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  variables <- c("BPI_interference", "BPI_PScore")
+  
+  tmp <- df %>% select(time, all_of(variables))
+  
+  # Convert to long format
+  library(reshape2)
+  dfw_long <- melt(tmp,
+                   id.vars = "time",
+                   measure.vars = c("BPI_interference","BPI_PScore"),
+                   variable.name = "condition")
+  interference <- tmp %>%
+    group_by(time) %>%
+    dplyr::summarise(smean = mean(BPI_interference, na.rm = TRUE),
+                     ssd = sd(BPI_interference, na.rm = TRUE),
+                     count = n()) %>%
+    dplyr::mutate(se = ssd / sqrt(count),
+                  lower_ci = util_lower_ci(smean, se, count),
+                  upper_ci = util_upper_ci(smean, se, count))
+  
+  severity <- tmp %>%
+    group_by(time) %>%
+    dplyr::summarise(smean = mean(BPI_PScore, na.rm = TRUE),
+              ssd = sd(BPI_PScore, na.rm = TRUE),
+              count = n()) %>%
+    dplyr::mutate(se = ssd / sqrt(count),
+           lower_ci = util_lower_ci(smean, se, count),
+           upper_ci = util_upper_ci(smean, se, count))
+  
+  interference$Pain <- "Interference"
+  severity$Pain <- "Severity"
+  
+  mydata <- rbind(interference, severity)
+
+  p <- 
+    ggplot(mydata, aes(x=time, y=smean, ymin=lower_ci, ymax=upper_ci, group=Pain)) +
+    geom_ribbon(aes(fill=Pain), alpha=0.4) +
+    geom_line(aes(color=Pain), size=1) + 
+    geom_point(aes(color=Pain), size=2) + 
+    ylim(0,10) + 
+    labs(title ="",
+         x = "Years",
+         y = "Mean score (out of 10)")
+
+  return(p)
 }
 
 # PLOT 4: Summary of BPI scores 
-pain_bpi_tbl <- function(){
+pain_bpi_tbl <- function(df){
+  variables <- c("BPI_interference", "BPI_PScore")
   
+  tmp <- df %>% select(time, all_of(variables))
+  
+  # Convert to long format
+  library(reshape2)
+  dfw_long <- melt(tmp,
+                   id.vars = "time",
+                   measure.vars = c("BPI_interference","BPI_PScore"),
+                   variable.name = "condition")
+  interference <- tmp %>%
+    group_by(time) %>%
+    dplyr::summarise(smean = mean(BPI_interference, na.rm = TRUE),
+                     ssd = sd(BPI_interference, na.rm = TRUE),
+                     count = n()) %>%
+    dplyr::mutate(se = ssd / sqrt(count),
+                  lower_ci = util_lower_ci(smean, se, count),
+                  upper_ci = util_upper_ci(smean, se, count))
+  
+  severity <- tmp %>%
+    group_by(time) %>%
+    dplyr::summarise(smean = mean(BPI_PScore, na.rm = TRUE),
+                     ssd = sd(BPI_PScore, na.rm = TRUE),
+                     count = n()) %>%
+    dplyr::mutate(se = ssd / sqrt(count),
+                  lower_ci = util_lower_ci(smean, se, count),
+                  upper_ci = util_upper_ci(smean, se, count))
+  
+  interference$Pain <- "Interference"
+  severity$Pain <- "Severity"
+  
+  mydata <- rbind(interference, severity)
+  
+  mydata <- mydata[, c(8,1,2,3,4,5,6,7)]
+  return(mydata)
 }
 
 ##############################################################################
