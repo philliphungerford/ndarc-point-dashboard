@@ -191,12 +191,12 @@ ui <- dashboardPage(
                     fluidRow(
                         # box 5 is the histogram
                         box(
-                            style = box_height,
+                            style = "height:450px",
                             title = "Histogram",
                             plotOutput("demographic_histogram", height = 250)),
                         # box 6 is the summary for pie chart
                         box(
-                            style = box_height,
+                            style = "height:450px",
                             title = "Summary plot",
                             tableOutput("demographic_sum"))
                     )
@@ -225,13 +225,13 @@ ui <- dashboardPage(
                     fluidRow(
                         # BOX 3: Line graph BPI interference / severity
                         box(
-                            style = box_height,
+                            style = "height:450px",
                             title = "Brief Pain Inventory: Interference & Severity",
                             plotOutput("pain_bpi_p", height = 250)),
                         
                         # BOX 4: table of BPI interference / severity
                         box(
-                            style = box_height,
+                            style = "height:450px",
                             title = "Brief Pain Inventory Summaries over Time",
                             tableOutput("pain_bpi_t"))
                     )
