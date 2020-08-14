@@ -26,7 +26,7 @@ library(shiny)
 library(shinydashboard) # for tabs
 library(DT) # for displaying tables
 library(ggplot2)
-
+library(data.table)
 # functions for plots
 source("functions/utilities.R")
 source("functions/section_02_plots.R")
@@ -35,7 +35,7 @@ source("functions/section_04_plots.R")
 #5
 #6
 source("functions/section_07_plots.R")
-#8
+source("functions/section_08_plots.R")
 source("functions/section_09_plots.R")
 source("functions/section_10_plots.R")
 ##############################################################################
@@ -272,7 +272,21 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # SECTION EIGHT: MENTAL HEALTH
             tabItem(tabName = "mental_health",
-                    h2("Mental Health")
+                    h2("Mental Health"),
+                    fluidRow(
+                        
+                        # BOX 1: Ever used (stacked plot of yes/no for each drug)
+                        box(
+                            style = box_height,
+                            title = "Ever diagnosed",
+                            plotOutput("mh_r1b1", height = 250)),
+                        
+                        # Box 2: Plot of past 12m use
+                        box(
+                            style = box_height,
+                            title = "Past 12m presentation",
+                            plotOutput("mh_r1b2", height = 250))
+                    )
             ),
             #-----------------------------------------------------------------
             # SECTION NINE: SUBSTANCE
@@ -496,6 +510,19 @@ server <- function(input, output) {
     # PLOT 2: Health satisfaction
     output$qol_q2 <- renderPlot({
         qol_q2_plot(df=point)
+    })
+    
+    #=========================================================================
+    # SECTION 08: Mental Health
+    #-------------------------------------------------------------------------
+    ## ROW 1 BOX 1: 
+    output$mh_r1b1 <- renderPlot({
+        mh_ever_plot(point)
+    })
+    
+    ## ROW 1 BOX 3: Past 12m 
+    output$mh_r1b2 <- renderPlot({
+        mh_drug_trend_plot(point)
     })
     
     #=========================================================================
