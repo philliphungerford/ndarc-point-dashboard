@@ -36,7 +36,7 @@ source("functions/section_04_plots.R")
 #6
 source("functions/section_07_plots.R")
 #8
-#9
+source("functions/section_09_plots.R")
 source("functions/section_10_plots.R")
 ##############################################################################
 # load data
@@ -77,6 +77,15 @@ values_dictionary$Variable <- zoo::na.locf(values_dictionary$Variable)
 medications <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug"]
 medications <- as.character(medications)
 medications <- as.factor(unique(medications)) # 187 drugs
+
+# substance use options
+substance_use_options <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug and alcohol abuse dependence"]
+substance_use_options <- as.character(substance_use_options)
+substance_use_options <- as.factor(unique(substance_use_options)) # 184 options
+
+# Parameters
+box_height = "height:400px"
+select_height = "height:100px"
 ##############################################################################
 # SECTION 1: USER INTERFACE
 ##############################################################################
@@ -153,10 +162,12 @@ ui <- dashboardPage(
                     fluidRow(
                         # box 1 and 2 for selection
                         box(
+                            style = select_height,
                             title = "Select continuous variable",
                             "Select a variable from", br(), "",
                             selectInput(inputId = "demographic_int_selection", label = "Variable:", choices = demographic_int)),
                         box(
+                            style = select_height,
                             title = "Select discrete variable",
                             "Select a variable from", br(), "",
                             selectInput(inputId = "demographic_fac_selection", label = "Variable:", choices = demographic_fac))
@@ -166,10 +177,12 @@ ui <- dashboardPage(
                     fluidRow(
                         # box 3 is the Histogram
                         box(
+                            style = box_height,
                             title = "Density plot",
                             plotOutput("demographic_density", height = 250)),
                         # box 4 is the summary
                         box(
+                            style = box_height,
                             title = "Pie chart",
                             plotOutput("demographic_donut", height = 250))
                     ),
@@ -178,10 +191,12 @@ ui <- dashboardPage(
                     fluidRow(
                         # box 5 is the histogram
                         box(
+                            style = box_height,
                             title = "Histogram",
                             plotOutput("demographic_histogram", height = 250)),
                         # box 6 is the summary for pie chart
                         box(
+                            style = box_height,
                             title = "Summary plot",
                             tableOutput("demographic_sum"))
                     )
@@ -196,10 +211,12 @@ ui <- dashboardPage(
                     fluidRow(
                         # BOX 1: Histogram of bar
                         box(
+                            style = box_height,
                             title = "Chronic conditions at baseline",
                             plotOutput("pain_baseline", height = 250)),
                         # BOX 2: Histogram of bar
                         box(
+                            style = box_height,
                             title = "Past 12m reported chronic conditions",
                             plotOutput("pain_past12m", height = 250))
                     ),
@@ -208,11 +225,13 @@ ui <- dashboardPage(
                     fluidRow(
                         # BOX 3: Line graph BPI interference / severity
                         box(
+                            style = box_height,
                             title = "Brief Pain Inventory: Interference & Severity",
                             plotOutput("pain_bpi_p", height = 250)),
                         
                         # BOX 4: table of BPI interference / severity
                         box(
+                            style = box_height,
                             title = "Brief Pain Inventory Summaries over Time",
                             tableOutput("pain_bpi_t"))
                     )
@@ -240,10 +259,12 @@ ui <- dashboardPage(
                     fluidRow(
                         # BOX 1: Quality of life plot
                         box(
+                            style = box_height,
                             title = "How would you rate your quality of life?",
                             plotOutput("qol_q1", height = 500)),
                         # BOX 2: Health satisfaction plot
                         box(
+                            style = box_height,
                             title = "How satisfied are you with your health?",
                             plotOutput("qol_q2", height = 500))
                     )
@@ -258,11 +279,63 @@ ui <- dashboardPage(
             tabItem(tabName = "substance_use",
                     h2("Substance Use"),
                     
-                    # have two sub-tabs within the data dictionary tab
-                    tabsetPanel(
-                        tabPanel("Lifetime & Current Drug Use", textOutput("text1")), 
-                        tabPanel("Abuse & Dependence", textOutput("text2"))
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Top Row: Life time
+                    h3("Lifetime and current drug use"),
+                    fluidRow(
+                        
+                        # BOX 1: Ever used (stacked plot of yes/no for each drug)
+                        box(
+                            style = box_height,
+                            title = "Ever Used",
+                            plotOutput("substance_use_r1b1", height = 250)),
+                        
+                        # Box 2: Plot of past 12m use
+                        box(
+                            style = box_height,
+                            title = "Past 12m Use",
+                            plotOutput("substance_use_r1b2", height = 250))
                     ),
+                    
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Second row: opioid dependence
+                    h3("Opioid Abuse and Dependence"),
+                    fluidRow(
+                        # BOX 4: Opioid dependence plot
+                        box(
+                            style = box_height,
+                            title = "ICD10 pharmaceutical opioid dependence",
+                            plotOutput("substance_use_r2b1", height = 250)),
+                        
+                        # BOX 5: Opioid dependence summary
+                        box(
+                            style = box_height,
+                            title = "ICD10 pharmaceutical opioid dependence Summary",
+                            tableOutput("substance_use_r2b2"))
+                    ),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Second row: Baseline drug dependence
+                    h3("Drug and Alcohol Abuse and Dependence Measured at Baseline"),
+                    fluidRow(
+                        # BOX 6: Opioid dependence plot
+                        box(
+                            style = select_height,
+                            title = "Select",
+                            selectInput("substance_use_select", "Criteria:", substance_use_options))),
+                        
+                    fluidRow(
+                        # BOX 7: Bar plot of yes no 
+                        box(
+                            style = box_height,
+                            title = "Presentation",
+                            plotOutput("substance_use_r3b2")),
+                        
+                        # BOX 8: Opioid dependence summary
+                        box(
+                            style = box_height,
+                            title = "Summary",
+                            tableOutput("substance_use_r3b3"))
+                    )
             ),
             #-----------------------------------------------------------------
             # SECTION TEN: MEDICATION DIARY
@@ -273,6 +346,7 @@ ui <- dashboardPage(
                     fluidRow(
                         # box 3 is the medication selection
                         box(
+                            style = "height:110px",
                             title = "Select Medication",
                             "Select a medication from", br(), "participant's medication diary.",
                             selectInput("medication", "Variable:", medications))
@@ -282,22 +356,26 @@ ui <- dashboardPage(
                     fluidRow(
                         # box 1 is the medication summary
                         box(
-                        title = "Proportion of users Plot",
-                        plotOutput("medication_plot", height = 250)),
+                            style = box_height,
+                            title = "Proportion of users Plot",
+                            plotOutput("medication_plot", height = 250)),
                         # box 2 is the plot
                         box(
-                        title = "Proportion Summary",
-                        tableOutput("medication_proportions"))
+                            style = box_height,
+                            title = "Proportion Summary",
+                            tableOutput("medication_proportions"))
                     ),
                    
-                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     fluidRow(
                         # box 1 is the medication summary
                         box(
+                            style = box_height,
                             title = "Mean Oral Morphine Equivalent over study",
                             plotOutput("medication_ome", height = 250)),
                         # box 3 is the medication selection
                         box(
+                            style = box_height,
                             title = "OME Summary",
                             tableOutput("medication_ome_summary"))
                     )
@@ -423,12 +501,38 @@ server <- function(input, output) {
     #=========================================================================
     # SECTION 09: Substance Use
     #-------------------------------------------------------------------------
-    output$text1 <- renderText({
-        "this is text1"
+    # ROW 1: lifetime and current drug use
+    
+    ## ROW 1 BOX 1: 
+    output$substance_use_r1b1 <- renderPlot({
+        su_ever_plot(point)
     })
-    output$text2 <- renderText({
-        "this is text2"
+    
+    ## ROW 1 BOX 3: Past 12m 
+    output$substance_use_r1b2 <- renderPlot({
+        su_drug_trend_plot(point)
     })
+    
+    
+    # ROW 2: Opioid dependence
+    
+    output$substance_use_r2b1 <- renderPlot({
+        su_proportion_plot(point, 'Pharm_Opioids_Dep_ICD10', outcome = "Yes")
+    })
+    
+    output$substance_use_r2b2 <- renderTable({
+        su_proportion_tbl(point, 'Pharm_Opioids_Dep_ICD10', outcome = "Yes")
+    })
+    
+    # ROW 3: Drug abuse and dependence
+    output$substance_use_r3b2 <- renderPlot({
+        su_plot(point, input$substance_use_select)
+    })
+    
+    output$substance_use_r3b3 <- renderTable({
+        table(point[which(point$time==0), input$substance_use_select])
+    })
+    
     
     #=========================================================================
     # SECTION 10: medication diary
