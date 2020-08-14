@@ -256,7 +256,13 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # SECTION NINE: SUBSTANCE
             tabItem(tabName = "substance_use",
-                    h2("Substance Use")
+                    h2("Substance Use"),
+                    
+                    # have two sub-tabs within the data dictionary tab
+                    tabsetPanel(
+                        tabPanel("Lifetime & Current Drug Use", textOutput("text1")), 
+                        tabPanel("Abuse & Dependence", textOutput("text2"))
+                    ),
             ),
             #-----------------------------------------------------------------
             # SECTION TEN: MEDICATION DIARY
@@ -413,6 +419,17 @@ server <- function(input, output) {
     output$qol_q2 <- renderPlot({
         qol_q2_plot(df=point)
     })
+    
+    #=========================================================================
+    # SECTION 09: Substance Use
+    #-------------------------------------------------------------------------
+    output$text1 <- renderText({
+        "this is text1"
+    })
+    output$text2 <- renderText({
+        "this is text2"
+    })
+    
     #=========================================================================
     # SECTION 10: medication diary
     #-------------------------------------------------------------------------
