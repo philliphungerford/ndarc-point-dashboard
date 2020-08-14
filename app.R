@@ -84,7 +84,7 @@ substance_use_options <- as.character(substance_use_options)
 substance_use_options <- as.factor(unique(substance_use_options)) # 184 options
 
 # Parameters
-box_height = "height:400px"
+box_height = "height:300px"
 select_height = "height:100px"
 ##############################################################################
 # SECTION 1: USER INTERFACE
@@ -326,13 +326,13 @@ ui <- dashboardPage(
                     fluidRow(
                         # BOX 7: Bar plot of yes no 
                         box(
-                            style = box_height,
+                            style = "height:500px",
                             title = "Presentation",
                             plotOutput("substance_use_r3b2")),
                         
                         # BOX 8: Opioid dependence summary
                         box(
-                            style = box_height,
+                            style = "height:500px",
                             title = "Summary",
                             tableOutput("substance_use_r3b3"))
                     )

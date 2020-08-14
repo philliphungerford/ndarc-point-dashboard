@@ -234,6 +234,9 @@ su_proportion_plot <- function(df, variable, outcome = "yes"){
   names(tall)[names(tall) == "V4"] <- 'time'
   names(tall)[names(tall) == "V5"] <- 'Users'
   names(tall)[names(tall) == "V6"] <- 'N'
+  names(tall)[names(tall) == "V7"] <- 'variable'
+  
+  tall <- tall[,c(1:6)]
   
   tall$time <- as.factor(tall$time)
   tall <- tall[which(tall$time != 1), ]
@@ -289,7 +292,9 @@ su_proportion_tbl <- function(df, variable, outcome = "yes"){
   names(tall)[names(tall) == "V4"] <- 'time'
   names(tall)[names(tall) == "V5"] <- 'Users'
   names(tall)[names(tall) == "V6"] <- 'N'
+  names(tall)[names(tall) == "V7"] <- 'variable'
   
+  tall <- tall[,c(1:6)]
   tall$time <- as.factor(tall$time)
   tall <- tall[which(tall$time != 1), ]
   

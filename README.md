@@ -40,6 +40,13 @@ This section was based on two questions asked about quality of life and health s
 ### 8. Mental Health(to do)
 
 ### 9. Substance Use (to do)
+This section collected information about participants lifetime and current drug use as well as their classification of abuse or dependence based on certain criteria. This section was built with three rows to separate each subsection of the Substance Use tab. 
+
+![The first two rows of substance use.](images/substance-use-1.png "Screenshot of the Substance Use section.")
+
+Many of the plots now are similar to each other with only the input variable changing, speeding up the time it takes to make the section.
+
+![The third row of substance use.](images/substance-use-2.png "Screenshot of the Substance Use and abuse section.")
 
 ### 10. Medication Diary (completed)
 At each wave, a seven-day medication diary collected frequency and dose information on all consumed pain-related medicines, psychiatric medicines and prescribed sleep medicines. The measures, tools, and data domains were selected based on recommendations made by the Initiative on Methods, Measurement, and Pain Assessment in Clinical Trials (IMMPACT).
