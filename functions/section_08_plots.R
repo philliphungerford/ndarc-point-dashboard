@@ -144,8 +144,9 @@ mh_drug_trend_plot <- function(df){
   for (i in 1:length(names)){
     t2$Condition[t2$variable == variables[i]] <- names[i]
   }
+  # remove year 1 data because there was no data collected at this time point
+  t2 <- t2[which(t2$time != 1), ]
   
-  t <- t[which(t$time != 1), ]
   # Create plot from summary table data
   y_label <- paste0("Proportion of POINT Users")
   p <- ggplot(data=t2, aes(x=time, y=estimate, ymin=lower, ymax=upper, group=Condition))+
