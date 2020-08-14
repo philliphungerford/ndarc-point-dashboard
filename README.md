@@ -39,7 +39,7 @@ This section was based on two questions asked about quality of life and health s
 
 ### 8. Mental Health(to do)
 
-### 9. Substance Use (to do)
+### 9. Substance Use (completed)
 This section collected information about participants lifetime and current drug use as well as their classification of abuse or dependence based on certain criteria. This section was built with three rows to separate each subsection of the Substance Use tab. 
 
 ![The first two rows of substance use.](images/substance-use-1.png "Screenshot of the Substance Use section.")

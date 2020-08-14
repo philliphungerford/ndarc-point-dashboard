@@ -329,8 +329,7 @@ su_plot <- function(df,var){
     geom_bar(aes(y = (..count..)/sum(..count..))) +
     labs(title="",
          x = "",
-         y = "Proportion of Participants (%)") + 
-    theme_bw()
+         y = "Proportion of Participants (%)")
   
   return(p)
 }
