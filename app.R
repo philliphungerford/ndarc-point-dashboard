@@ -32,7 +32,7 @@ source("functions/utilities.R")
 source("functions/section_02_plots.R")
 #3
 source("functions/section_04_plots.R")
-#5
+source("functions/section_05_plots.R")
 #6
 source("functions/section_07_plots.R")
 source("functions/section_08_plots.R")
@@ -239,7 +239,54 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # SECTION FIVE: PHYSICAL FUNCTION
             tabItem(tabName = "physical",
-                    h2("Physical Function Measures")
+                    h2("Physical Function Measures"),
+                    
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Top Row: Exercise 
+                    h3("Exercise"),
+                    fluidRow(
+                        
+                        # BOX 1: Days exercising per week 
+                        box(
+                            style = box_height,
+                            title = "Days per week exercising",
+                            plotOutput("pf_r1b1", height = 250)),
+                        
+                        # Box 2: Exercise intensity (pie chart)
+                        box(
+                            style = box_height,
+                            title = "Exercise Intensity",
+                            plotOutput("pf_r1b2", height = 250)),
+                        
+                        
+                    ),
+                    
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Second row: exercise type
+
+                    fluidRow(
+                        # BOX 3: Exercise type (pie chart)
+                        box(
+                            style = box_height,
+                            title = "Exercise type",
+                            plotOutput("pf_r2b1"))
+                    ),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Third Row: Sleep & PSEQ
+                    h3("Pain Self Efficacy Questionnaire and Sleep"),
+                    fluidRow(
+                        # BOX 4: PSEQ (line graph)
+                        box(
+                            style = "height:500px",
+                            title = "Pain Self Efficacy Questionnaire Score (PSEQ)",
+                            plotOutput("pf_r3b1")),
+                        
+                        # BOX 5: Sleep (line graph)
+                        box(
+                            style = "height:500px",
+                            title = "Sleep Score",
+                            plotOutput("pf_r3b2"))
+                    )
             ),
             #-----------------------------------------------------------------
             # SECTION SIX: TREATMENT
@@ -495,7 +542,28 @@ server <- function(input, output) {
     #=========================================================================
     # SECTION 05: Physical Function
     #-------------------------------------------------------------------------
+    # Exercise
+    ## R1B1: Exercise days
+    output$pf_r1b1 <- renderPlot({
+        pf_ex_days(df=point)
+    })
+    ## R1B2: Exercise intensity
+    output$pf_r1b2 <- renderPlot({
+        pf_ex_in(df=point)
+    })
+    ## R2B1: Exercise type
+    output$pf_r2b1 <- renderPlot({
+        pf_ex_tp(df=point)
+    }, height = 250)
     
+    ## R3B1: PSEQ
+    output$pf_r3b1 <- renderPlot({
+        pf_pseq(df=point)
+    })
+    ## R3B2: Sleep
+    output$pf_r3b2 <- renderPlot({
+        pf_slp(df=point)
+    })
     #=========================================================================
     # SECTION 06: Treatment
     #-------------------------------------------------------------------------

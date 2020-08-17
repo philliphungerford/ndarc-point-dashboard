@@ -27,7 +27,13 @@ The pain section summarises the chronic pain conditions that participants self r
 
 ![Screenshot of the pain section.](images/pain.png "Screenshot of the pain section.")
 
-### 5. Physical Function (to do)
+### 5. Physical Function (completed)
+Has exercise, pseq and sleep scores. 
+
+![Screenshot of the physical function section.](images/physical-function-1.png "Screenshot of the physical function section.")
+
+![Screenshot of the physical function section.](images/physical-function-2.png "Screenshot of the physical function section.")
+
 
 ### 6. Treatment (to do)
 
