@@ -45,14 +45,16 @@ source("functions/section_10_plots.R") # 10 - medication diary
 # 13 - acknowledgements
 ##############################################################################
 # load data
-#point_master <- read_sav("../versions/point-v0.9.1.9.sav")
-#point <- subset(point_master, followup==1) # remove attrition
-
 point_master <- read.csv("data/point-v0.9.5.csv", na.strings=c("", " "))
 point <- subset(point_master, followup=='followed up') # remove attrition N=7578
 
 # SECTION 2: Measures
 table_measures <- read.csv("data/measures-converted.csv")
+
+# SECTION 10: Data dictionary
+data_dictionary <- read.csv("data/point-v0.9.5-dictionary.csv")
+values_dictionary <- read.csv("data/point-v0.9.5-dictionary-values.csv", na.strings=c(""))
+##############################################################################
 
 # SECTION 3: Demographics (use class() to check dtype)
 demographic_int <- c("Age" = "age", # int
@@ -100,8 +102,6 @@ medications <- as.character(medications)
 medications <- as.factor(unique(medications)) # 187 drugs
 
 # SECTION 11 : Data Dictionary
-data_dictionary <- read.csv("data/point-v0.9.5-dictionary.csv")
-values_dictionary <- read.csv("data/point-v0.9.5-dictionary-values.csv", na.strings=c(""))
 values_dictionary$Variable <- zoo::na.locf(values_dictionary$Variable)
 
 # SECTION 12: Published
@@ -500,8 +500,8 @@ ui <- dashboardPage(
                     
                     # have two sub-tabs within the data dictionary tab
                     tabsetPanel(
-                                tabPanel("Data Dictionary", DT::dataTableOutput("data_dictionary")), 
-                                tabPanel("Variable Values", DT::dataTableOutput("values_dictionary"))
+                                tabPanel("Data Dictionary", DT::dataTableOutput("data_dictionary_tab")), 
+                                tabPanel("Variable Values", DT::dataTableOutput("values_dictionary_tab"))
                     ),
             ),
             #-----------------------------------------------------------------
@@ -714,17 +714,17 @@ server <- function(input, output) {
     })
     #=========================================================================
     # SECTION ELEVEN: Data Dictionary
-    output$data_dictionary = DT::renderDataTable({
+    output$data_dictionary_tab = DT::renderDataTable({
         DT::datatable(data_dictionary, options = list(lengthMenu = c(100, 500, 1000, nrow(data_dictionary)), pageLength = 100))
     })
-    output$values_dictionary = DT::renderDataTable({
+    output$values_dictionary_tab = DT::renderDataTable({
         DT::datatable(values_dictionary, options = list(lengthMenu = c(100, 500, 1000, nrow(values_dictionary)), pageLength = 100))
     })
     
     #=========================================================================
     # SECTION TWELVE: Published papers
     output$published_papers = DT::renderDataTable({
-        DT::datatable(published_papers_dat, options = list(lengthMenu = c(5, nrow(published_papers)), pageLength = 100))
+        DT::datatable(published_papers_dat, options = list(lengthMenu = c(5, nrow(published_papers_dat)), pageLength = 100))
     })
     #=========================================================================
     # End server
