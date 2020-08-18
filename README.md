@@ -47,7 +47,9 @@ This section was based on two questions asked about quality of life and health s
 ![Screenshot of the quality-of-life section.](images/quality-of-life.png "Screenshot of the quality of life section.")
 
 
-### 8. Mental Health(to do)
+### 8. Mental Health (completed)
+The mental health tab shows those who ever showed a presentation as well as past 12 month presentation of mental health disorders.
+![Screenshot of the mental health section.](images/mental-health.png "Screenshot of the mental health section.")
 
 ### 9. Substance Use (completed)
 This section collected information about participants lifetime and current drug use as well as their classification of abuse or dependence based on certain criteria. This section was built with three rows to separate each subsection of the Substance Use tab. 
