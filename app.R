@@ -33,7 +33,7 @@ source("functions/section_02_plots.R")
 #3
 source("functions/section_04_plots.R")
 source("functions/section_05_plots.R")
-#6
+source("functions/section_06_plots.R")
 source("functions/section_07_plots.R")
 source("functions/section_08_plots.R")
 source("functions/section_09_plots.R")
@@ -83,9 +83,26 @@ substance_use_options <- data_dictionary$Variable[data_dictionary$Subcategory ==
 substance_use_options <- as.character(substance_use_options)
 substance_use_options <- as.factor(unique(substance_use_options)) # 184 options
 
+# ORBIT items
+
+orbit_items <- c(
+    'Asked my doctor for an increase in my prescribed dose' = 'orb_1',
+    'Asked my doctor for an early renewal of my prescription' = 'orb_2',
+    'Used another person’s opioid medication, or bought it from the street' = 'orb_3',
+    'Saved up my opioid medication, just in case I needed it later' = 'orb_4',
+    'Gone to a different doctor to get more opioid medication'= 'orb_5',
+    'Asked my doctor for another prescription because either I had lost, had it stolen, or someone used it' = 'orb_6',
+    'Given or sold my prescribed medication to someone else' = 'orb_7',
+    'Altered my dose in some other way' = 'orb_8',
+    'Taken my opioid medication by a different route than was prescribed' = 'orb_9',
+    'Have used my opioid medication for other purposes' = 'orb_10'
+)
+
 # Parameters
-box_height = "height:300px"
+box_height = "height:600px"
+plot_height = 400
 select_height = "height:100px"
+
 ##############################################################################
 # SECTION 1: USER INTERFACE
 ##############################################################################
@@ -177,12 +194,12 @@ ui <- dashboardPage(
                     fluidRow(
                         # box 3 is the Histogram
                         box(
-                            style = box_height,
+                            style = "height:300px",
                             title = "Density plot",
                             plotOutput("demographic_density", height = 250)),
                         # box 4 is the summary
                         box(
-                            style = box_height,
+                            style = "height:300px",
                             title = "Pie chart",
                             plotOutput("demographic_donut", height = 250))
                     ),
@@ -291,7 +308,33 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # SECTION SIX: TREATMENT
             tabItem(tabName = "treatment",
-                    h2("Treatment Received")
+                    h2("Treatment Received"),
+                    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    # Info boxes for Overview
+                    h3("Opioid Related Behaviours In Treatment (ORBIT)"),
+                    fluidRow(
+                        # BOX 6: Opioid dependence plot
+                        box(
+                            style = select_height,
+                            title = "Select ORBIT item",
+                            selectInput("tmt_orbit_select", "In the past three months, I have:", orbit_items)),
+                    
+                    ),
+                    ## ROW 2: OUTPUTS
+                    fluidRow(
+                        # BOX 6: Opioid dependence plot
+                        box(
+                            style = box_height,
+                            title = "ORBIT responses",
+                            plotOutput("tmt_r2b1", height = 500)),
+                        
+                        # BOX 2: Health satisfaction plot
+                        box(
+                            style = box_height,
+                            title = "ORBIT responses (excluding 'Never')",
+                            plotOutput("tmt_r2b2", height = 500))
+                    )
+                    
             ),
             #-----------------------------------------------------------------
             # SECTION SEVEN: QOL
@@ -523,17 +566,17 @@ server <- function(input, output) {
     # PLOT 1: BASELINE CHRONIC PAIN CONDITIONS
     output$pain_baseline <- renderPlot({
         pain_baseline_plot(df=point)
-    })
+    }, height = plot_height)
     
     # PLOT 2: PAST 12m CHRONIC PAIN CONDITIONS
     output$pain_past12m <- renderPlot({
         pain_past12m_plot(df=point)
-    })
+    }, height = plot_height)
     
     # PLOT 3: BPI plot
     output$pain_bpi_p <- renderPlot({
         pain_bpi_plot(df=point)
-    })
+    }, height = plot_height)
     
     # Box 4: BPI summary
     output$pain_bpi_t <- renderTable({
@@ -546,39 +589,46 @@ server <- function(input, output) {
     ## R1B1: Exercise days
     output$pf_r1b1 <- renderPlot({
         pf_ex_days(df=point)
-    })
+    }, height = plot_height)
     ## R1B2: Exercise intensity
     output$pf_r1b2 <- renderPlot({
         pf_ex_in(df=point)
-    })
+    }, height = plot_height)
     ## R2B1: Exercise type
     output$pf_r2b1 <- renderPlot({
         pf_ex_tp(df=point)
-    }, height = 250)
+    }, height = plot_height)
     
     ## R3B1: PSEQ
     output$pf_r3b1 <- renderPlot({
         pf_pseq(df=point)
-    })
+    }, height = plot_height)
     ## R3B2: Sleep
     output$pf_r3b2 <- renderPlot({
         pf_slp(df=point)
-    })
+    }, height = plot_height)
     #=========================================================================
     # SECTION 06: Treatment
     #-------------------------------------------------------------------------
+    # ROW 3: Drug abuse and dependence
+    output$tmt_r2b1 <- renderPlot({
+        tmt_orbit_plot_1(df = point, variables = input$tmt_orbit_select)
+    }, height = plot_height)
     
+    output$tmt_r2b2 <- renderPlot({
+        tmt_orbit_plot_2(df = point, variables = input$tmt_orbit_select)
+    }, height = plot_height)
     #=========================================================================
     # SECTION 07: Quality of life
     #-------------------------------------------------------------------------
     # PLOT 1: Quality of life
     output$qol_q1 <- renderPlot({
         qol_q1_plot(df=point)
-    })
+    }, height = plot_height)
     # PLOT 2: Health satisfaction
     output$qol_q2 <- renderPlot({
         qol_q2_plot(df=point)
-    })
+    }, height = plot_height)
     
     #=========================================================================
     # SECTION 08: Mental Health
@@ -586,12 +636,12 @@ server <- function(input, output) {
     ## ROW 1 BOX 1: 
     output$mh_r1b1 <- renderPlot({
         mh_ever_plot(point)
-    })
+    }, height = plot_height)
     
     ## ROW 1 BOX 3: Past 12m 
     output$mh_r1b2 <- renderPlot({
         mh_drug_trend_plot(point)
-    })
+    }, height = plot_height)
     
     #=========================================================================
     # SECTION 09: Substance Use
@@ -601,19 +651,19 @@ server <- function(input, output) {
     ## ROW 1 BOX 1: 
     output$substance_use_r1b1 <- renderPlot({
         su_ever_plot(point)
-    })
+    }, height = plot_height)
     
     ## ROW 1 BOX 3: Past 12m 
     output$substance_use_r1b2 <- renderPlot({
         su_drug_trend_plot(point)
-    })
+    }, height = plot_height)
     
     
     # ROW 2: Opioid dependence
     
     output$substance_use_r2b1 <- renderPlot({
         su_proportion_plot(point, 'Pharm_Opioids_Dep_ICD10', outcome = "Yes")
-    })
+    }, height = plot_height)
     
     output$substance_use_r2b2 <- renderTable({
         su_proportion_tbl(point, 'Pharm_Opioids_Dep_ICD10', outcome = "Yes")
@@ -622,7 +672,7 @@ server <- function(input, output) {
     # ROW 3: Drug abuse and dependence
     output$substance_use_r3b2 <- renderPlot({
         su_plot(point, input$substance_use_select)
-    })
+    }, height = plot_height)
     
     output$substance_use_r3b3 <- renderTable({
         table(point[which(point$time==0), input$substance_use_select])
@@ -640,12 +690,12 @@ server <- function(input, output) {
     # Proportion plot
     output$medication_plot <- renderPlot({
         proportion_plot(point, input$medication, outcome = "Yes")
-    })
+    }, height = plot_height)
     #-------------------------------------------------------------------------
     # OME plot
     output$medication_ome <- renderPlot({
         ome_plot(point, input$medication)
-    })
+    }, height = plot_height)
     #-------------------------------------------------------------------------
     # OME Summary
     output$medication_ome_summary <- renderTable({

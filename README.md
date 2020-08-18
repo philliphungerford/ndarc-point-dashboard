@@ -36,6 +36,10 @@ Has exercise, pseq and sleep scores.
 
 
 ### 6. Treatment (to do)
+This section contains the other treatments for chronic pain, perceived effect of treatment, beliefs about medicines, convenience accessing medications, side-effects of opioid medicatio, barriers to treatment, reasons for discontinuing, aberrant opioid medication-related behaviours (ROBIT) and opioid difficulties (PODS).
+
+I have currently completed the ORBIT section. 
+![Screenshot of the treatment: ORBIT section.](images/treatment-orbit.png "Screenshot of the treatment: ORBIT section.")
 
 ### 7. Quality of Life (completed)
 This section was based on two questions asked about quality of life and health satisfaction. Numbers were summarised into proportions over time. 
