@@ -29,15 +29,14 @@ library(ggplot2)
 library(data.table)
 # functions for plots
 source("functions/utilities.R")
-source("functions/section_02_plots.R")
-#3
-source("functions/section_04_plots.R")
-source("functions/section_05_plots.R")
-source("functions/section_06_plots.R")
-source("functions/section_07_plots.R")
-source("functions/section_08_plots.R")
-source("functions/section_09_plots.R")
-source("functions/section_10_plots.R")
+source("functions/section_03_plots.R") # demographics
+source("functions/section_04_plots.R") # pain
+source("functions/section_05_plots.R") # physical function
+source("functions/section_06_plots.R") # treatment
+source("functions/section_07_plots.R") # quality of life
+source("functions/section_08_plots.R") # mental health
+source("functions/section_09_plots.R") # substance use
+source("functions/section_10_plots.R") # medication diary
 ##############################################################################
 # load data
 #point_master <- read_sav("../versions/point-v0.9.1.9.sav")
