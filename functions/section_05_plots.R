@@ -8,11 +8,6 @@
 ## EXERCISE 
 # NOTE: Exercise variables not collected at year 1
 
-# Line plot for days used
-table(df$time, df$ex_days)
-
-
-
 # DEPENDENCE
 pf_ex_days <- function(df){
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -290,9 +285,6 @@ pf_slp <- function(df){
     dplyr::mutate(se = ssd / sqrt(count),
                   lower_ci = util_lower_ci(smean, se, count),
                   upper_ci = util_upper_ci(smean, se, count))
-  
-  # remove time 1 because it was not collected then 
-  pseq <- pseq[which(pseq$time != 1),]
   
   p <- 
     ggplot(slp, aes(x=time, y=smean, ymin=lower_ci, ymax=upper_ci)) +
