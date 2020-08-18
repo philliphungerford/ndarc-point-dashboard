@@ -80,7 +80,9 @@ When you look up a search term:
 
 ### 12. Published Papers
 This section showcases the published papers relating to the POINT dataset.
+![Example of the published papers section.](images/published-papers.png "Example of the published papers section.")
 
 ### 13. Acknowledgements
+The acknowledgments section pays acknowledgement to those who have contributed to the POINT study. I have attached an image which was possible by creating a directory called 'www' and storing the image there. 
 
 ## Conclusion

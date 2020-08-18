@@ -27,16 +27,22 @@ library(shinydashboard) # for tabs
 library(DT) # for displaying tables
 library(ggplot2)
 library(data.table)
+##############################################################################
 # functions for plots
 source("functions/utilities.R")
-source("functions/section_03_plots.R") # demographics
-source("functions/section_04_plots.R") # pain
-source("functions/section_05_plots.R") # physical function
-source("functions/section_06_plots.R") # treatment
-source("functions/section_07_plots.R") # quality of life
-source("functions/section_08_plots.R") # mental health
-source("functions/section_09_plots.R") # substance use
-source("functions/section_10_plots.R") # medication diary
+# 1 - overview
+# 2 - measurs
+source("functions/section_03_plots.R") # 3 - demographics
+source("functions/section_04_plots.R") # 4 - pain
+source("functions/section_05_plots.R") # 5 - physical function
+source("functions/section_06_plots.R") # 6 - treatment
+source("functions/section_07_plots.R") # 7 - quality of life
+source("functions/section_08_plots.R") # 8 - mental health
+source("functions/section_09_plots.R") # 9 - substance use
+source("functions/section_10_plots.R") # 10 - medication diary
+# 11 - data dictionary
+# 12 - published
+# 13 - acknowledgements
 ##############################################################################
 # load data
 #point_master <- read_sav("../versions/point-v0.9.1.9.sav")
@@ -47,7 +53,6 @@ point <- subset(point_master, followup=='followed up') # remove attrition N=7578
 
 # SECTION 2: Measures
 table_measures <- read.csv("data/measures-converted.csv")
-
 
 # SECTION 3: Demographics (use class() to check dtype)
 demographic_int <- c("Age" = "age", # int
@@ -67,35 +72,40 @@ demographic_fac <- c("Sex" = "sex", # fact
                      "Accomodation status" = "accom" # fac
 )
 
-# SECTION X : Data Dictionary
-data_dictionary <- read.csv("data/point-v0.9.5-dictionary.csv")
-values_dictionary <- read.csv("data/point-v0.9.5-dictionary-values.csv", na.strings=c(""))
-values_dictionary$Variable <- zoo::na.locf(values_dictionary$Variable)
+# SECTION 06: Treatment
+## Orbit
+orbit_items <- c(
+    'Q1. Asked my doctor for an increase in my prescribed dose' = 'orb_1',
+    'Q2. Asked my doctor for an early renewal of my prescription' = 'orb_2',
+    'Q3. Used another person’s opioid medication, or bought it from the street' = 'orb_3',
+    'Q4. Saved up my opioid medication, just in case I needed it later' = 'orb_4',
+    'Q5. Gone to a different doctor to get more opioid medication'= 'orb_5',
+    'Q6. Asked my doctor for another prescription because either I had lost, had it stolen, or someone used it' = 'orb_6',
+    'Q7. Given or sold my prescribed medication to someone else' = 'orb_7',
+    'Q8. Altered my dose in some other way' = 'orb_8',
+    'Q9. Taken my opioid medication by a different route than was prescribed' = 'orb_9',
+    'Q10. Have used my opioid medication for other purposes' = 'orb_10'
+)
 
-# Medication vars 
-medications <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug"]
-medications <- as.character(medications)
-medications <- as.factor(unique(medications)) # 187 drugs
-
+# SECTION 09: SUbstance Use
 # substance use options
 substance_use_options <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug and alcohol abuse dependence"]
 substance_use_options <- as.character(substance_use_options)
 substance_use_options <- as.factor(unique(substance_use_options)) # 184 options
 
-# ORBIT items
+# SECTION 10: Medication diary
+# Medication vars 
+medications <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug"]
+medications <- as.character(medications)
+medications <- as.factor(unique(medications)) # 187 drugs
 
-orbit_items <- c(
-    'Asked my doctor for an increase in my prescribed dose' = 'orb_1',
-    'Asked my doctor for an early renewal of my prescription' = 'orb_2',
-    'Used another person’s opioid medication, or bought it from the street' = 'orb_3',
-    'Saved up my opioid medication, just in case I needed it later' = 'orb_4',
-    'Gone to a different doctor to get more opioid medication'= 'orb_5',
-    'Asked my doctor for another prescription because either I had lost, had it stolen, or someone used it' = 'orb_6',
-    'Given or sold my prescribed medication to someone else' = 'orb_7',
-    'Altered my dose in some other way' = 'orb_8',
-    'Taken my opioid medication by a different route than was prescribed' = 'orb_9',
-    'Have used my opioid medication for other purposes' = 'orb_10'
-)
+# SECTION 11 : Data Dictionary
+data_dictionary <- read.csv("data/point-v0.9.5-dictionary.csv")
+values_dictionary <- read.csv("data/point-v0.9.5-dictionary-values.csv", na.strings=c(""))
+values_dictionary$Variable <- zoo::na.locf(values_dictionary$Variable)
+
+# SECTION 12: Published
+published_papers_dat <- read.csv("data/published-year-title.csv", fileEncoding = 'UTF-8-BOM')
 
 # Parameters
 box_height = "height:600px"
@@ -497,7 +507,9 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # Twelfth tab content
             tabItem(tabName = "published",
-                    h2("Published Papers")
+                    h2("Published Papers"),
+                    # Display published papers table
+                    DT::dataTableOutput("published_papers")
             ),
             #-----------------------------------------------------------------
             # Thirteenth tab content
@@ -707,6 +719,12 @@ server <- function(input, output) {
     })
     output$values_dictionary = DT::renderDataTable({
         DT::datatable(values_dictionary, options = list(lengthMenu = c(100, 500, 1000, nrow(values_dictionary)), pageLength = 100))
+    })
+    
+    #=========================================================================
+    # SECTION TWELVE: Published papers
+    output$published_papers = DT::renderDataTable({
+        DT::datatable(published_papers_dat, options = list(lengthMenu = c(5, nrow(published_papers)), pageLength = 100))
     })
     #=========================================================================
     # End server
