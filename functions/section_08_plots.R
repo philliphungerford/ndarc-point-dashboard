@@ -136,8 +136,13 @@ mh_drug_trend_plot <- function(df){
     'Personality disorder'
   )
   
+  df <- df %>% select(Participant_ID, time, all_of(variables))
+
+  df  <- df[which(df$time !=1 ), ] # 6343
+  df.cc <- get_complete_case(df, variable='dep_12m', yrs=5)
+  
   # Creates summary table and plots
-  t <- lapply(variables, util_percent_ci_all, times=0:5, df=df, outcome="Yes")
+  t <- lapply(variables, util_percent_ci_all, times=c(0,2,3,4,5), df=df.cc, outcome="Yes")
   t2 <- bind_rows(t, .id = "column_label")
   
   t2$Condition <- ""
@@ -145,10 +150,10 @@ mh_drug_trend_plot <- function(df){
     t2$Condition[t2$variable == variables[i]] <- names[i]
   }
   # remove year 1 data because there was no data collected at this time point
-  t2 <- t2[which(t2$time != 1), ]
+  #t2 <- t2[which(t2$time != 1), ]
   
   # Create plot from summary table data
-  y_label <- paste0("Proportion of POINT Users")
+  y_label <- paste0("Proportion of participants (%) (N=", table(df.cc$time)[1], ")")
   p <- ggplot(data=t2, aes(x=time, y=estimate, ymin=lower, ymax=upper, group=Condition))+
     geom_ribbon(alpha = 0.3, aes(fill=Condition), show.legend = T) +
     geom_line(aes(color=Condition)) +

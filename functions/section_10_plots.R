@@ -48,6 +48,8 @@ percent_ci <- function(df, variable, outcome="Yes", time_ind=0){
 }
 
 proportion_make <- function(df, variable, outcome = "yes"){
+  # get complete case data
+  df <- get_complete_case(df = df, variable = 'totalopioiddose')
   ##############################################################################
   t0 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=0)
   t1 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=1)
@@ -71,6 +73,8 @@ proportion_make <- function(df, variable, outcome = "yes"){
 }
 
 proportion_plot <- function(df, variable, outcome = "yes"){
+  # get complete case data
+  df <- get_complete_case(df = df, variable = 'totalopioiddose')
   ##############################################################################
   t0 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=0)
   t1 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=1)
@@ -100,6 +104,9 @@ return(p)
 
 ome_plot <- function(df, variable){
   require(dplyr)
+  # get complete case data
+  df <- get_complete_case(df = df, variable = 'totalopioiddose')
+  
   tmp <- df %>% select(time, totalopioiddose, all_of(variable))
   names(tmp)[names(tmp) == variable] <- 'drug'
   tmp[,3] <- as.integer(tmp[,3])-1
@@ -133,6 +140,8 @@ ome_plot <- function(df, variable){
 
 ome_summary <- function(df, variable){
   require(dplyr)
+  # get complete case data
+  df <- get_complete_case(df = df, variable = 'totalopioiddose')
   tmp <- df %>% select(time, totalopioiddose, all_of(variable))
   names(tmp)[names(tmp) == variable] <- 'drug'
   

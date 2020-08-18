@@ -21,7 +21,10 @@ tmt_orbit_plot_1 <- function(df, variables='orb_1'){
   #     p: line plot
   #
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  tmp <- df %>% select(time, all_of(variables))
+  #variables='orb_1'
+  tmp <- df %>% select(Participant_ID, time, all_of(variables))
+  tmp <- get_complete_case(df = tmp, variable = variables, yrs=6) #n=4128
+  
   
   #rename it for usability
   names(tmp)[names(tmp) == variables] <- "item"
@@ -44,7 +47,7 @@ tmt_orbit_plot_1 <- function(df, variables='orb_1'){
   
   # for proportions
   t2 <- table(tmp$time)
-  t2 <- table(df$time)
+  #t2 <- table(df$time)
   
   t$n <- NA
   
@@ -66,6 +69,8 @@ tmt_orbit_plot_1 <- function(df, variables='orb_1'){
   # colours
   colours <- c('#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e')
   
+  y_label <- paste0("Percentage of Participants (%) (N=", table(tmp$time)[1], ")")
+  
   p <- 
     ggplot(t, aes(x=Var1, y = prop, group = Item, color= Item)) + 
     geom_line(size=1) + 
@@ -74,7 +79,7 @@ tmt_orbit_plot_1 <- function(df, variables='orb_1'){
     ylim(0,100) +
     labs(title="",
          x = "Years",
-         y = "Percentage of Participants (%)") 
+         y = y_label) 
   p
   return(p)
 }
@@ -94,7 +99,9 @@ tmt_orbit_plot_2 <- function(df, variables='orb_1'){
   #     p: line plot
   #
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  tmp <- df %>% select(time, all_of(variables))
+  #variables='orb_1'
+  tmp <- df %>% select(Participant_ID, time, all_of(variables))
+  tmp <- get_complete_case(df = tmp, variable = variables, yrs=6) #n=4128
   
   #rename it for usability
   names(tmp)[names(tmp) == variables] <- "item"
@@ -117,7 +124,7 @@ tmt_orbit_plot_2 <- function(df, variables='orb_1'){
   
   # for proportions
   t2 <- table(tmp$time)
-  t2 <- table(df$time)
+  #t2 <- table(df$time)
   
   t$n <- NA
   
@@ -139,14 +146,17 @@ tmt_orbit_plot_2 <- function(df, variables='orb_1'){
   names(t)[names(t) == "Var2"] <- "Item"
   
   colours <- c('#d95f02','#7570b3','#e7298a','#66a61e')
+  
+  y_label <- paste0("Percentage of Participants (%) (N=", table(tmp$time)[1], ")")
+  
   p <- 
     ggplot(t, aes(x=Var1, y = prop, group = Item, color= Item)) + 
     geom_line(size=1) + 
     geom_point(size=2) +
-    scale_color_manual(values=colours) +
+    scale_color_manual(values = colours) + 
     labs(title="",
          x = "Years",
-         y = "Percentage of Participants (%)") 
+         y = y_label) 
   p
   return(p)
 }

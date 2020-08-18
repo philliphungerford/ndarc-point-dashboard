@@ -45,7 +45,8 @@ source("functions/section_10_plots.R") # 10 - medication diary
 # 13 - acknowledgements
 ##############################################################################
 # load data
-point_master <- read.csv("data/point-v0.9.5.csv", na.strings=c("", " "))
+point_master <- read.csv("data/point-v0.9.5.csv", na.strings=c("", " "), encoding='UTF-8')
+names(point_master)[names(point_master) == "X.U.FEFF.Participant_ID"] <- "Participant_ID"
 point <- subset(point_master, followup=='followed up') # remove attrition N=7578
 
 # SECTION 2: Measures

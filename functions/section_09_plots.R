@@ -175,9 +175,22 @@ su_drug_trend_plot <- function(df){
     'Benzodiazepines someone elses',
     'Hallucinagens'
   )
+  df.cc <- df %>% select(Participant_ID, time, all_of(variables))
+  
+  # keep those based on medication diary
+  #df.cc <- df[complete.cases(df[, variable]), ] # 7152
+  
+  # 1. Get count of ID's presented over time period (min = 1, max = 6) 
+  id_counts <- table(df.cc$Participant_ID)
+  
+  # 2. Get ID's for people  who participated in all waves 
+  id_all_waves <- names(id_counts[id_counts == 6])
+  
+  # 3. Subset data by these people (N = 4842)
+  df.cc <- df.cc[df.cc$Participant_ID %in% id_all_waves,] # 4830
   
   # Creates summary table and plots
-  t <- lapply(variables, util_percent_ci_all, times=0:5, df=df, outcome="Yes")
+  t <- lapply(variables, util_percent_ci_all, times=0:5, df=df.cc, outcome="Yes")
   t2 <- bind_rows(t, .id = "column_label")
   
   t2$Condition <- ""
@@ -187,7 +200,7 @@ su_drug_trend_plot <- function(df){
   
   
   # Create plot from summary table data
-  y_label <- paste0("Proportion of POINT Users")
+  y_label <- paste0("Percentage of Participants (%) (N=", table(df.cc$time)[1], ")")
   p <- ggplot(data=t2, aes(x=time, y=estimate, ymin=lower, ymax=upper, group=Condition))+
     geom_ribbon(alpha = 0.3, aes(fill=Condition), show.legend = T) +
     geom_line(aes(color=Condition)) +
@@ -219,15 +232,31 @@ su_proportion_plot <- function(df, variable, outcome = "yes"){
   target_name = ""
   variable = 'Pharm_Opioids_Dep_ICD10'
   outcome = "Yes"
-  ##############################################################################
-  t0 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=0)
-  t1 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=1)
-  t2 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=2)
-  t3 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=3)
-  t4 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=4)
-  t5 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=5)
+  df <- df %>% select(Participant_ID, time, variable)
+  df.cc <- na.omit(df)
+  df.cc <- df.cc[which(df.cc$time != 1),]
   
-  tall <- as.data.frame(rbind(t0,t1,t2,t3,t4,t5))
+  # keep those based on medication diary
+  #df.cc <- df[complete.cases(df[, variable]), ] # 7152
+  
+  # 1. Get count of ID's presented over time period (min = 1, max = 6) 
+  id_counts <- table(df.cc$Participant_ID)
+  
+  # 2. Get ID's for people  who participated in all waves 
+  id_all_waves <- names(id_counts[id_counts == 5])
+  
+  # 3. Subset data by these people (N = 4842)
+  df.cc <- df.cc[df.cc$Participant_ID %in% id_all_waves,] # 4830
+  
+  ##############################################################################
+  t0 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=0)
+  #t1 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=1)
+  t2 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=2)
+  t3 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=3)
+  t4 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=4)
+  t5 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=5)
+  
+  tall <- as.data.frame(rbind(t0,t2,t3,t4,t5))
   names(tall)[names(tall) == "V1"] <- 'estimate'
   names(tall)[names(tall) == "V2"] <- 'lower'
   names(tall)[names(tall) == "V3"] <- 'upper'
@@ -247,7 +276,7 @@ su_proportion_plot <- function(df, variable, outcome = "yes"){
   tall <- tall %>% mutate_at(numerics, as.numeric)
   
   ##############################################################################
-  y_label <- paste0("Proportion of Participants (%)")
+  y_label <- paste0("Percentage of Participants (%) (N=", table(df.cc$time)[1], ")")
   p <- ggplot(data=tall, aes(x=time, y=estimate, ymin=lower, ymax=upper, group=1))+
     #geom_line(size = 8, colour="black",) +
     #geom_df(size=1, color='blue') +
@@ -257,6 +286,7 @@ su_proportion_plot <- function(df, variable, outcome = "yes"){
          x = "Time",
          y = y_label) + 
     theme_bw()
+  p
   return(p)
 }
 # ROW 2
@@ -277,15 +307,31 @@ su_proportion_tbl <- function(df, variable, outcome = "yes"){
   target_name = ""
   variable = 'Pharm_Opioids_Dep_ICD10'
   outcome = "Yes"
-  ##############################################################################
-  t0 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=0)
-  t1 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=1)
-  t2 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=2)
-  t3 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=3)
-  t4 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=4)
-  t5 <- util_percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=5)
+  df <- df %>% select(Participant_ID, time, variable)
+  df.cc <- na.omit(df)
+  df.cc <- df.cc[which(df.cc$time != 1),]
   
-  tall <- as.data.frame(rbind(t0,t1,t2,t3,t4,t5))
+  # keep those based on medication diary
+  #df.cc <- df[complete.cases(df[, variable]), ] # 7152
+  
+  # 1. Get count of ID's presented over time period (min = 1, max = 6) 
+  id_counts <- table(df.cc$Participant_ID)
+  
+  # 2. Get ID's for people  who participated in all waves 
+  id_all_waves <- names(id_counts[id_counts == 5])
+  
+  # 3. Subset data by these people (N = 4842)
+  df.cc <- df.cc[df.cc$Participant_ID %in% id_all_waves,] # 4830
+  
+  ##############################################################################
+  t0 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=0)
+  #t1 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=1)
+  t2 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=2)
+  t3 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=3)
+  t4 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=4)
+  t5 <- util_percent_ci(df=df.cc, variable=variable,  outcome=outcome, time_ind=5)
+  
+  tall <- as.data.frame(rbind(t0,t2,t3,t4,t5))
   names(tall)[names(tall) == "V1"] <- 'estimate'
   names(tall)[names(tall) == "V2"] <- 'lower'
   names(tall)[names(tall) == "V3"] <- 'upper'

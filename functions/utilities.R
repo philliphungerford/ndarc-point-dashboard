@@ -99,6 +99,27 @@ util_upper_ci <- function(mean, se, n, conf_level = 0.95){
   upper_ci <- mean + qt(1 - ((1 - conf_level) / 2), n - 1) * se
 }
 
+
+get_complete_case <- function(df, variable, yrs=6){
+  # Get complete case data = df.cc
+
+  # keep those based on medication diary
+  df.cc <- df[complete.cases(df[, variable]), ] # 7152
+  
+  # 1. Get count of ID's presented over time period (min = 1, max = 6) 
+  id_counts <- table(df.cc$Participant_ID)
+  
+  # 2. Get ID's for people  who participated in all waves 
+  id_all_waves <- names(id_counts[id_counts == yrs])
+  
+  # 3. Subset data by these people (N = 4842)
+  df.cc <- df.cc[df.cc$Participant_ID %in% id_all_waves,] # 4830
+  table(df.cc$time) # 805 at each wave, N=4830
+  
+  return(df.cc)
+}
+
+# t <- get_complete_case(df = point, variable = 'totalopioiddose')
 ##############################################################################
 #################################### END #####################################
 ##############################################################################

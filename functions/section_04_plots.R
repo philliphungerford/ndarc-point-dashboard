@@ -116,8 +116,23 @@ pain_past12m_plot <- function(df){
     'Generalised'
   )
   
+  df <- df %>% select(Participant_ID, time, all_of(chronic_variables))
+  df.cc <- na.omit(df)
+  
+  # keep those based on medication diary
+  #df.cc <- df[complete.cases(df[, variable]), ] # 7152
+  
+  # 1. Get count of ID's presented over time period (min = 1, max = 6) 
+  id_counts <- table(df.cc$Participant_ID)
+  
+  # 2. Get ID's for people  who participated in all waves 
+  id_all_waves <- names(id_counts[id_counts == 6])
+  
+  # 3. Subset data by these people (N = 4842)
+  df.cc <- df.cc[df.cc$Participant_ID %in% id_all_waves,] # 4830
+  
   # Creates summary table and plots
-  t <- lapply(chronic_variables, util_percent_ci_all, times=0:5, df=df, outcome="Yes")
+  t <- lapply(chronic_variables, util_percent_ci_all, times=0:5, df=df.cc, outcome="Yes")
   t2 <- bind_rows(t, .id = "column_label")
   
   t2$Condition <- ""
@@ -127,7 +142,7 @@ pain_past12m_plot <- function(df){
 
   
   # Create plot from summary table data
-  y_label <- paste0("Proportion of POINT Users")
+  y_label <- paste0("Percentage of Participants (%) (N=", table(df.cc$time)[1], ")")
   p <- ggplot(data=t2, aes(x=time, y=estimate, ymin=lower, ymax=upper, group=Condition))+
     geom_ribbon(alpha = 0.3, aes(fill=Condition), show.legend = T) +
     geom_line(aes(color=Condition)) +
@@ -136,6 +151,7 @@ pain_past12m_plot <- function(df){
          x = "Time",
          y = y_label) + 
     ylim(0,100)
+  p
   return(p)
 }
 
@@ -157,7 +173,8 @@ pain_bpi_plot <- function(df){
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   variables <- c("BPI_interference", "BPI_PScore")
   
-  tmp <- df %>% select(time, all_of(variables))
+  tmp <- df %>% select(Participant_ID, time, all_of(variables))
+  tmp <- get_complete_case(df = tmp, variable = variables, yrs=6) #n=5820
   
   # Convert to long format
   library(reshape2)
@@ -188,6 +205,7 @@ pain_bpi_plot <- function(df){
   
   mydata <- rbind(interference, severity)
 
+  y_label <- paste0("Mean score (out of 10) (N=", table(tmp$time)[1], ")")
   p <- 
     ggplot(mydata, aes(x=time, y=smean, ymin=lower_ci, ymax=upper_ci, group=Pain)) +
     geom_ribbon(aes(fill=Pain), alpha=0.4) +
@@ -196,8 +214,8 @@ pain_bpi_plot <- function(df){
     ylim(0,10) + 
     labs(title ="",
          x = "Years",
-         y = "Mean score (out of 10)")
-
+         y = y_label)
+  p
   return(p)
 }
 
@@ -205,7 +223,8 @@ pain_bpi_plot <- function(df){
 pain_bpi_tbl <- function(df){
   variables <- c("BPI_interference", "BPI_PScore")
   
-  tmp <- df %>% select(time, all_of(variables))
+  tmp <- df %>% select(Participant_ID, time, all_of(variables))
+  tmp <- get_complete_case(df = tmp, variable = variables, yrs=6) #n=5820
   
   # Convert to long format
   library(reshape2)
