@@ -50,13 +50,17 @@ names(point_master)[names(point_master) == "X.U.FEFF.Participant_ID"] <- "Partic
 point <- subset(point_master, followup=='followed up') # remove attrition N=7578
 
 # SECTION 2: Measures
-table_measures <- read.csv("data/measures-converted.csv")
+table_measures <- read.csv("data/measures-converted.csv", fileEncoding='UTF-8-BOM')
 
 # SECTION 10: Data dictionary
 data_dictionary <- read.csv("data/point-v0.9.5-dictionary.csv")
 values_dictionary <- read.csv("data/point-v0.9.5-dictionary-values.csv", na.strings=c(""))
-##############################################################################
 
+# SECTION 12: Published
+published_papers_dat <- read.csv("data/published-year-title.csv", fileEncoding = 'UTF-8-BOM')
+
+##############################################################################
+# fine tune parameters for each tab
 # SECTION 3: Demographics (use class() to check dtype)
 demographic_int <- c("Age" = "age", # int
                       "Height" = "height", # int
@@ -104,9 +108,6 @@ medications <- as.factor(unique(medications)) # 187 drugs
 
 # SECTION 11 : Data Dictionary
 values_dictionary$Variable <- zoo::na.locf(values_dictionary$Variable)
-
-# SECTION 12: Published
-published_papers_dat <- read.csv("data/published-year-title.csv", fileEncoding = 'UTF-8-BOM')
 
 # Parameters
 box_height = "height:600px"
