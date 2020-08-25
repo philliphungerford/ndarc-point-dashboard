@@ -212,7 +212,7 @@ ui <- dashboardPage(
                       Pain 2003, 106(3):337–345."),
                     
                     # Display measures table
-                    div(DT::dataTableOutput(outputId = "table_measures", width = '100%', height = 'auto'), style = "font-size: 85%; width: 85%")
+                    div(DT::dataTableOutput(outputId = "table_measures", width = '100%', height = 'auto'), style = "font-size: 100%; width: 95%")
             ),
             #-----------------------------------------------------------------
             # SECTION THREE: DEMOGRAPHICS
