@@ -51,8 +51,8 @@ names(point_master)[names(point_master) == "X.U.FEFF.Participant_ID"] <- "Partic
 point <- subset(point_master, followup=='followed up') # remove attrition N=7578
 
 # SECTION 2: Measures
-table_measures <- read.csv("data/measures-converted.csv", fileEncoding='UTF-8-BOM')
-
+table_measures <- read.csv("data/20200825-measures-converted.csv", fileEncoding='UTF-8-BOM')
+    
 # SECTION 10: Data dictionary
 data_dictionary <- read.csv("data/point-v0.9.5-dictionary.csv")
 values_dictionary <- read.csv("data/point-v0.9.5-dictionary-values.csv", na.strings=c(""))
@@ -191,9 +191,6 @@ ui <- dashboardPage(
                       pain [1,2]. The draft content of our interview was also
                       reviewed and discussed by the POINT advisory committee."),
                     
-                    # Display measures table
-                    DT::dataTableOutput("table_measures"),
-                    
                     p("1. Dworkin RH, Turk DC, Farrar JT, Haythornthwaite JA, 
                       Jensen MP, Katz NP, Kerns RD, Stucki G, Allen RR,
                       Bellamy N, Dworkin RH, Turk DC, Farrar JT, 
@@ -212,7 +209,10 @@ ui <- dashboardPage(
                       Manning DC, McCormick CG, McDermott MP, McGrath P, 
                       Quessy S, Rappaport BA, et al: Core outcome domains for 
                       chronic pain clinical trials: IMMPACT recommendations. 
-                      Pain 2003, 106(3):337–345.")
+                      Pain 2003, 106(3):337–345."),
+                    
+                    # Display measures table
+                    div(DT::dataTableOutput(outputId = "table_measures", width = '100%', height = 'auto'), style = "font-size: 85%; width: 85%")
             ),
             #-----------------------------------------------------------------
             # SECTION THREE: DEMOGRAPHICS
