@@ -54,6 +54,8 @@ su_ever_plot <- function(df){
   
   tmp <- df %>% select(time, all_of(variables))
   tmp <- tmp[which(tmp$time==0),]
+  tmp <- tmp %>% mutate_at(variables, as.character)
+  tmp <- tmp %>% mutate_at(variables, as.factor)
   tmp <- tmp %>% mutate_at(variables, as.numeric)-1
   t <- as.data.frame(colSums(tmp, na.rm=T))
   names(t)[1] <- "users"

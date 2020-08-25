@@ -27,6 +27,7 @@ library(shinydashboard) # for tabs
 library(DT) # for displaying tables
 library(ggplot2)
 library(data.table)
+library(reshape2)
 ##############################################################################
 # functions for plots
 source("functions/utilities.R")
@@ -196,7 +197,7 @@ ui <- dashboardPage(
                             selectInput(inputId = "demographic_int_selection", label = "Variable:", choices = demographic_int)),
                         box(
                             style = select_height,
-                            title = "Select discrete variable",
+                            title = "Select categorical variable",
                             "Select a variable from", br(), "",
                             selectInput(inputId = "demographic_fac_selection", label = "Variable:", choices = demographic_fac))
                     ),

@@ -21,7 +21,7 @@ pain_baseline_plot <- function(df){
   #     p: bar plot
   #
   # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  chronic_variables <- c(
+  variables <- c(
     'Arth_12m',
     'Back_12m',
     'Head_12m',
@@ -44,12 +44,13 @@ pain_baseline_plot <- function(df){
   )
 
   # select chronic pain variables
-  tmp <- df %>% select(time, all_of(chronic_variables))
+  tmp <- df %>% select(time, all_of(variables))
   
   #subset for baseline only 
   tmp <- tmp[tmp$time==0, ]
-
-  tmp <- tmp %>% mutate_at(chronic_variables, as.numeric)-1
+  tmp <- tmp %>% mutate_at(variables, as.character)
+  tmp <- tmp %>% mutate_at(variables, as.factor)
+  tmp <- tmp %>% mutate_at(variables, as.numeric)-1
   
   # get proportions
   t <- round((colSums(tmp, na.rm=T) / nrow(tmp))*100,2)
@@ -62,7 +63,7 @@ pain_baseline_plot <- function(df){
   
   t$Condition <- ""
   for (i in 1:length(chronic_names)){
-    t$Condition[t$rn == chronic_variables[i]] <- chronic_names[i]
+    t$Condition[t$rn == variables[i]] <- chronic_names[i]
   }
   
     
