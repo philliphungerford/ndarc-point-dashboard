@@ -179,8 +179,40 @@ ui <- dashboardPage(
                     h2("Measures"),
                     p("Here are the measures, tools, domains and time-points for data collection for the POINT study.
                       Taken from Table 2 of the POINT Protocol."),
+                    br(),
+                    p("These measures were based on recommendations made under 
+                      the auspices of the Initiative on Methods, Measurement, 
+                      and Pain As- sessment in Clinical Trials (IMMPACT). This 
+                      Initiative involved 27 specialists from academia, 
+                      governmental agencies, and the pharmaceutical industry 
+                      who partici- pated in a consensus meeting and identified
+                      core out- come domains and measures that should be
+                      considered in clinical trials of treatments for chronic
+                      pain [1,2]. The draft content of our interview was also
+                      reviewed and discussed by the POINT advisory committee."),
+                    
                     # Display measures table
-                    DT::dataTableOutput("table_measures")
+                    DT::dataTableOutput("table_measures"),
+                    
+                    p("1. Dworkin RH, Turk DC, Farrar JT, Haythornthwaite JA, 
+                      Jensen MP, Katz NP, Kerns RD, Stucki G, Allen RR,
+                      Bellamy N, Dworkin RH, Turk DC, Farrar JT, 
+                      Haythornthwaite JA, Jensen MP, Katz NP, Kerns RD,
+                      Stucki G, Allen RR, Bellamy N, Carr DB, Chandler J, 
+                      Cowan P, Dionne R, Galer BS, Hertz S, Jadad AR, Kramer LD,
+                      Manning DC, Martin S, et al: Core outcome measures for 
+                      chronic pain clinical trials: IMMPACT recommendations. 
+                      Pain 2005, 113(1–2):9–19."),
+                    br(),
+                    p("2. Turk DC, Dworkin RH, Allen RR, Bellamy N, 
+                      Brandenburg N, Carr DB, Cleeland C, Dionne R, Farrar JT,
+                      Galer BS, Turk DC, Dworkin RH, Allen RR, Bellamy N,
+                      Brandenburg N, Carr DB, Cleeland C, Dionne R, Farrar JT,
+                      Galer BS, Hewitt DJ, Jadad AR, Katz NP, Kramer LD, 
+                      Manning DC, McCormick CG, McDermott MP, McGrath P, 
+                      Quessy S, Rappaport BA, et al: Core outcome domains for 
+                      chronic pain clinical trials: IMMPACT recommendations. 
+                      Pain 2003, 106(3):337–345.")
             ),
             #-----------------------------------------------------------------
             # SECTION THREE: DEMOGRAPHICS
