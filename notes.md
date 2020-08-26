@@ -3,12 +3,15 @@
 This is for tracking what I have to do and what I have done on a given day.
 
 ## Tasks:
-
-- [ ] Publish
-- [ ] Refinements
-- [ ] Summarise data for security
-- [x] Create app layout and functions
 - [x] Draft design of dashboard
+- [x] Create app layout and functions
+- [ ] Fix data dictionary display, similar to measures fix
+- [ ] Summarise data for security
+- [ ] Refinements
+- [ ] Publish
+
+
+
 
 ### 2020-08-25
 
