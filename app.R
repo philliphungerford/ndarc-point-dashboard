@@ -152,15 +152,31 @@ ui <- dashboardPage(
             #-----------------------------------------------------------------
             # SECTION ONE: Overview
             tabItem(tabName = "overview",
-                    h1("The Pain and Opioids In Treatment (POINT) study"),
+                    #h1("The Pain and Opioids In Treatment (POINT) study"),
+                    div(img(src='point_logo.jpg', align = "center"), style="text-align: center;"),
+                    h1("Overview"),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Info boxes for Overview
                     fluidRow(
+                        # Drug type
+                        valueBox(value = "Opioids", "Drug type", icon = icon("line-chart"), color = "orange"),
+                        
                         # Participants = 1514
-                        valueBox(value = 1514, "Participants", icon = icon("male")),
+                        valueBox(value = 1514, "Participants", icon = icon("male"), color = "green"),
                         
                         # Years collected
                         valueBox(value = 6, "Years Collected", icon = icon("line-chart"), color = "purple"),
+                        
+                        # Date commenced
+                        valueBox(value = "01/2012", "Date commenced", icon = icon("calendar-o"), color = "blue"),
+                        
+                        # Expected Date of Completion
+                        valueBox(value = "12/2019", "Expected Date of Completion", icon = icon("calendar"), color = "blue"),
+                        
+                        # Project Supporters
+                        valueBox(value = p("National Health & Medical Research Council", style = 'font-size: 60%'), "Project Supporters", icon = icon("institution"), color = "green")
+                        
+
                     ),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     h2("Background"),
@@ -555,7 +571,8 @@ ui <- dashboardPage(
                     em("This dashboard was made my Phillip Hungerford at the National Drug and Alcohol Research Centre (NDARC). More details about the code used to make this dashboard can be found on GitHub (https://github.com/philliphungerford/ndarc-point-dashboard)"),
                     br(),
                     p("The National Drug and Alcohol Research Centre (NDARC) is a premier research institution in Sydney, Australia and is recognised internationally as a Research Centre of Excellence. NDARC was established at UNSW Sydney in May 1986 and officially opened in November 1987. The Centre is supported by funding from the Australian Government Department of Health under the Drug and Alcohol Program."),
-                    p("https://ndarc.med.unsw.edu.au"),
+                    p("For more details about the POINT study visit: ", a("POINT study details", href="https://ndarc.med.unsw.edu.au/project/point-study-pain-and-opioids-treatment")),
+                    p("For more details about NDARC visit: ", a("NDARC", href="https://ndarc.med.unsw.edu.au")),
                     img(src='ndarc.png', align = "bottom")
                     )
             #-----------------------------------------------------------------
