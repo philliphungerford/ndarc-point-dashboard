@@ -7,7 +7,7 @@ This shiny app dashboard demonstrates a novel way to present your data to the wo
 ## Sections
 The POINT project had distinct questions relating to various components of the participant's life. These were sectioned into separate tabs for exploration. 
 
-### 1. Overview & Meta data (drafted)
+### 1. Overview & Meta data (completed)
 The Overview tab, gives an introduction to the paper and provides the metadata for familiarisation. 
 
 ![Screenshot of the overview section.](images/overview.png "Screenshot of the overview section.")
