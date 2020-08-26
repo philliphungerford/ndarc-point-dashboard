@@ -201,34 +201,109 @@ ui <- dashboardPage(
                       factors predicting poor pain relief and other outcomes."),
                     
                     
-                    h2("Methods/Design"),
-                    p("The POINT cohort comprises around 1,500 people across 
-                      Australia prescribed pharmaceutical opioids for CNCP. 
-                      Participants will be followed-up at four time points over 
-                      a two year period. POINT will collect information on 
-                      demographics, physical and medication use history, pain,
-                      mental health, drug and alcohol use, non-adherence,
-                      medication diversion, sleep, and quality of life. Data
-                      linkage will provide information on medications and
-                      services from Medicare (Australia’s national health care 
-                      scheme). Data on those who receive opioid substitution 
-                      therapy, and on mortality, will be linked."),
+                    h2("Design and Method "),
+                    p("The POINT study is a national prospective cohort that 
+                      aims to follow 1500 chronic pain patients newly prescribed
+                      pharmaceutical opioids over a 24 month period. Follow-ups 
+                      have occurred at three months, 12 months and 24 months. 
+                      POINT II follow ups will occur at 3, 4 and 5 years. The
+                      interviews will cover topics such as; demographics, 
+                      chronic pain, treatment, physical and mental health, 
+                      physical functioning, social support and current and 
+                      lifetime substance use. Participants were recruited 
+                      through pharmacies throughout Australia. We will continue
+                      to follow patients that discontinue their pharmaceutical 
+                      opioid in order to examine reasons and effects of 
+                      discontinuance. "),
                     
-                    h2("Discussion"),
-                    p("This study will rigorously examine prescription opioid 
-                      use among CNCP patients, and examine its relationship to
-                      important health outcomes. The extent to which opioids for
-                      chronic pain is associated with pain reduction, quality of
-                      life, mental and physical health, aberrant medication 
-                      behavior and substance use disorders will be extensively
-                      examined. Improved understanding of the longer-term 
-                      outcomes of chronic opioid therapy will direct 
-                      community-based interventions and health policy in 
-                      Australia and internationally. The results of this study 
-                      will assist clinicians to better identify those patients 
-                      who are at risk of adverse outcomes and who therefore 
-                      require alternative treatment strategies."),
+                    h2("Progress/Update "),
+                    h3("POINT I"),
+                    p("The POINT study was approved by the university ethics
+                      committee in May, 2012 and National Pharmacy Guild in
+                      July, 2012. Recruitment for the study began late August 
+                      2012. Baseline interviews of 1,514 participants were 
+                      completed in April 2014 and 3-month self-complete surveys
+                      completed in September 2014, with a follow-up rate of 80%.
+                      12-month surveys were completed in June 2015, with a 
+                      follow-up rate of 82%. In December 2015 2- year interviews
+                      were finished, with a follow up rate of 85%."),
                     
+                    h3("POINT II"),
+                    p("In July 2016, NHMRC awarded funding for the project: 
+                      Pharmaceutical opioids for chronic non-cancer pain: 
+                      Evaluating health outcomes and economic impact over
+                      five years. The four-year study is an extension of 
+                      POINT  and is expected to conclude in 2019, with a 
+                      final report due in 2020. POINT II started January
+                      2016 with participants completing a 30-45 minute 
+                      interview over the phone. At the conclusion of 2016,
+                      interviews had been conducted with 1,210 participants 
+                      (80% of the sample). Four year interviews were initiated 
+                      in January 2017 and 1,206 have been completed thus far, 
+                      again reaching 80%. Five year interviews will begin in 
+                      January 2018."),
+                    
+                    p("Through collating data over 5 years, POINT II aims to 
+                    answer the following questions;"),
+                    
+                    p("1. What is the impact of opioids for CNCP on pain, 
+                    functioning, quality of life, healthcare, and healthcare
+                    costs over 5 years?"),
+                    
+                    p("2. What predicts transitions to and from opioid 
+                    non-adherence and dependence over 5 years?"),
+                    
+                    p("3. What are CNCP patients preferences with respect to 
+                      outcomes, side-effects, different medications and to 
+                      non-medication approaches to pain management?"),
+                   
+                    h2("Benefits"),
+                    p("The POINT project was the first large-scale Australian 
+                    prospective cohort study to rigorously examine opioid 
+                    analgesic prescribing patterns amongst chronic pain patients
+                    at a population level, and their relationship to important
+                    health outcomes and mortality. It was the first to 
+                    comprehensively examine the extent, to which opioid therapy
+                    for chronic pain is associated with pain reduction, adverse
+                    events including side effects, quality of life, and mental 
+                    and physical health outcomes."),
+                    
+                    p("Currently, the evidence base for the regulation and 
+                    monitoring of opioid analgesics is weak. Regulators across
+                    jurisdictions use different criteria for authorising 
+                    long-term opioid therapy, and different criteria for
+                    identifying at-risk patients. The results of this study will
+                    assist doctors and regulators in Australia to better 
+                    identify those patients who are at risk of adverse outcomes
+                    and who therefore require alternative treatment strategies.
+                    Improved understanding of the longer-term outcomes of
+                    chronic opioid therapy will direct community-based
+                    interventions and health policy in Australia."),
+                   
+                    p("Through another 3 years of follow up interviews, POINT II
+                    will further be able to shed light on the extent to which 
+                    patients experience problematic opioid use, some of the 
+                    precursors and protective factors to problematic use, and 
+                    the consequences of problematic opioid use resulting from
+                    chronic opioid therapy. It will lead to improved knowledge 
+                    of dose escalation and the positive and negative outcomes 
+                    for those who undergo rapid dose escalation and ultimately
+                    end up using high doses of opioid analgesics."),
+                    
+                    p("POINT II also aims to establish a long term trajectory of
+                    potential impacts on health care use and costs. It will 
+                    investigate patient preferences for interventions that
+                    improve pain and functioning, providing insight into why
+                    some ineffective but expensive treatments are used and why 
+                    long term opioid use persists even in light of little 
+                    clinical benefit."),
+                    
+                    p("Finally, the project will achieve the establishment of a
+                      cohort of Australians with chronic health problems. 
+                      The project will provide the groundwork for further 
+                      follow-up of the sample to determine the longer-term 
+                      outcomes for chronic pain patients."),
+           
                     # Source for citation
                     h3("Protocol citation:"),
                     p("Campbell, G., Mattick, R., Bruno, R., 
