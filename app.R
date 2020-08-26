@@ -155,26 +155,50 @@ ui <- dashboardPage(
                     #h1("The Pain and Opioids In Treatment (POINT) study"),
                     div(img(src='point_logo.jpg', align = "center"), style="text-align: center;"),
                     h1("Overview"),
+                    
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Info boxes for Overview
                     fluidRow(
                         # Drug type
-                        valueBox(value = "Opioids", "Drug type", icon = icon("line-chart"), color = "orange"),
+                        valueBox(
+                            value = "Opioids", "Drug type", 
+                            icon = icon("line-chart"),
+                            color = "orange"),
                         
                         # Participants = 1514
-                        valueBox(value = 1514, "Participants", icon = icon("male"), color = "green"),
+                        valueBox(
+                            value = 1514,
+                            "Participants",
+                            icon = icon("male"),
+                            color = "green"),
                         
                         # Years collected
-                        valueBox(value = 6, "Years Collected", icon = icon("line-chart"), color = "purple"),
+                        valueBox(
+                            value = 6,
+                            "Years Collected",
+                            icon = icon("line-chart"),
+                            color = "purple"),
                         
                         # Date commenced
-                        valueBox(value = "01/2012", "Date commenced", icon = icon("calendar-o"), color = "blue"),
+                        valueBox(
+                            value = "01/2012",
+                            "Date commenced",
+                            icon = icon("calendar-o"),
+                            color = "blue"),
                         
                         # Expected Date of Completion
-                        valueBox(value = "12/2019", "Expected Date of Completion", icon = icon("calendar"), color = "blue"),
+                        valueBox(
+                            value = "12/2019",
+                            "Expected Date of Completion",
+                            icon = icon("calendar"),
+                            color = "blue"),
                         
                         # Project Supporters
-                        valueBox(value = p("National Health & Medical Research Council", style = 'font-size: 60%'), "Project Supporters", icon = icon("institution"), color = "green")
+                        valueBox(
+                            value = p("National Health & Medical Research Council", style = 'font-size: 60%'), 
+                            "Project Supporters",
+                            icon = icon("institution"),
+                            color = "green")
                         
 
                     ),
@@ -317,7 +341,8 @@ ui <- dashboardPage(
             # SECTION TWO: MEASURES
             tabItem(tabName = "measures",
                     h2("Measures"),
-                    p("Here are the measures, tools, domains and time-points for data collection for the POINT study.
+                    p("Here are the measures, tools, domains and time-points for
+                    data collection for the POINT study.
                       Taken from Table 2 of the POINT Protocol."),
 
                     p("These measures were based on recommendations made under 
@@ -367,12 +392,18 @@ ui <- dashboardPage(
                             style = select_height,
                             title = "Select continuous variable",
                             "Select a variable from", br(), "",
-                            selectInput(inputId = "demographic_int_selection", label = "Variable:", choices = demographic_int)),
+                            selectInput(
+                                inputId = "demographic_int_selection",
+                                label = "Variable:",
+                                choices = demographic_int)),
                         box(
                             style = select_height,
                             title = "Select categorical variable",
                             "Select a variable from", br(), "",
-                            selectInput(inputId = "demographic_fac_selection", label = "Variable:", choices = demographic_fac))
+                            selectInput(
+                                inputId = "demographic_fac_selection",
+                                label = "Variable:",
+                                choices = demographic_fac))
                     ),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Info boxes for Overview
@@ -525,10 +556,16 @@ ui <- dashboardPage(
             # SECTION SEVEN: QOL
             tabItem(tabName = "qol",
                     h2("Quality of Life Assessment"),
-                    p("The following questions ask how you feel about your quality of life, health, or other areas of your life. I will read out each question to you, along with the response options. Please choose the answer that appears most appropriate. If you are unsure about which response to give to a question, the first response you think of is often the best one."),
-                    br(),
-                    p(" Please keep in mind your standards, hopes, pleasures and concerns. We ask that you think about your life in the last four weeks."),
-                    br(),
+                    p("The following questions ask how you feel about your 
+                      quality of life, health, or other areas of your life. I 
+                      will read out each question to you, along with the
+                      response options. Please choose the answer that appears
+                      most appropriate. If you are unsure about which response
+                      to give to a question, the first response you think of 
+                      is often the best one."),
+                    p(" Please keep in mind your standards, hopes, pleasures and
+                      concerns. We ask that you think about your life in the
+                      last four weeks."),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Info boxes for Overview
                     fluidRow(
@@ -630,7 +667,16 @@ ui <- dashboardPage(
             # SECTION TEN: MEDICATION DIARY
             tabItem(tabName = "med_diary",
                     h2("Medication Diary"),
-                    p("At each wave, a seven-day medication diary collected frequency and dose information on all consumed pain-related medicines, psychiatric medicines and prescribed sleep medicines. The measures, tools, and data domains were selected based on recommendations made by the Initiative on Methods, Measurement, and Pain Assessment in Clinical Trials (IMMPACT). Based on the seven day medication diary of participants, explore the medication use measured in oral morphine equivalent (OME), usage across the six years."),
+                    p("At each wave, a seven-day medication diary collected 
+                      frequency and dose information on all consumed 
+                      pain-related medicines, psychiatric medicines and 
+                      prescribed sleep medicines. The measures, tools, and data 
+                      domains were selected based on recommendations made by the
+                      Initiative on Methods, Measurement, and Pain Assessment in
+                      Clinical Trials (IMMPACT). Based on the seven day 
+                      medication diary of participants, explore the medication 
+                      use measured in oral morphine equivalent (OME), usage 
+                      across the six years."),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     fluidRow(
                         # box 3 is the medication selection
@@ -691,14 +737,29 @@ ui <- dashboardPage(
             # Thirteenth tab content
             tabItem(tabName = "acknowledgements",
                     h2("Acknowledgements"),
-                    p("A special thanks to all of the research assistants, chief investigators and most of all the participants who have contributed to this work."),
+                    p("A special thanks to all of the research assistants, chief
+                      investigators and most of all the participants who have
+                      contributed to this work."),
                     br(),
-                    em("This dashboard was made my Phillip Hungerford at the National Drug and Alcohol Research Centre (NDARC). More details about the code used to make this dashboard can be found on GitHub (https://github.com/philliphungerford/ndarc-point-dashboard)"),
+                    em("This dashboard was made my Phillip Hungerford at the
+                       National Drug and Alcohol Research Centre (NDARC). More
+                       details about the code used to make this dashboard can be
+                       found on GitHub (https://github.com/philliphungerford/ndarc-point-dashboard)"),
                     br(),
-                    p("The National Drug and Alcohol Research Centre (NDARC) is a premier research institution in Sydney, Australia and is recognised internationally as a Research Centre of Excellence. NDARC was established at UNSW Sydney in May 1986 and officially opened in November 1987. The Centre is supported by funding from the Australian Government Department of Health under the Drug and Alcohol Program."),
+                    p("The National Drug and Alcohol Research Centre (NDARC) is 
+                      a premier research institution in Sydney, Australia and is
+                      recognised internationally as a Research Centre of
+                      Excellence. NDARC was established at UNSW Sydney in May 
+                      1986 and officially opened in November 1987. The Centre is
+                      supported by funding from the Australian Government 
+                      Department of Health under the Drug and Alcohol Program."),
+                    
                     p("For more details about the POINT study visit: ", a("POINT study details", href="https://ndarc.med.unsw.edu.au/project/point-study-pain-and-opioids-treatment")),
                     p("For more details about NDARC visit: ", a("NDARC", href="https://ndarc.med.unsw.edu.au")),
-                    img(src='ndarc.png', align = "bottom")
+                    
+                    # display NDARC image
+                    div(img(src='ndarc.png', align = "center"), style="text-align: center;"),
+                    
                     )
             #-----------------------------------------------------------------
         ) # tabItems
@@ -778,11 +839,13 @@ server <- function(input, output) {
     output$pf_r1b1 <- renderPlot({
         pf_ex_days(df=point)
     }, height = plot_height)
+    
     ## R1B2: Exercise intensity
     output$pf_r1b2 <- renderPlot({
         pf_ex_in(df=point)
     }, height = plot_height)
-    ## R2B1: Exercise type
+   
+     ## R2B1: Exercise type
     output$pf_r2b1 <- renderPlot({
         pf_ex_tp(df=point)
     }, height = plot_height)
@@ -791,6 +854,7 @@ server <- function(input, output) {
     output$pf_r3b1 <- renderPlot({
         pf_pseq(df=point)
     }, height = plot_height)
+    
     ## R3B2: Sleep
     output$pf_r3b2 <- renderPlot({
         pf_slp(df=point)
@@ -813,6 +877,7 @@ server <- function(input, output) {
     output$qol_q1 <- renderPlot({
         qol_q1_plot(df=point)
     }, height = plot_height)
+    
     # PLOT 2: Health satisfaction
     output$qol_q2 <- renderPlot({
         qol_q2_plot(df=point)
@@ -892,16 +957,22 @@ server <- function(input, output) {
     #=========================================================================
     # SECTION ELEVEN: Data Dictionary
     output$data_dictionary_tab = DT::renderDataTable({
-        DT::datatable(data_dictionary, options = list(lengthMenu = c(100, 500, 1000, nrow(data_dictionary)), pageLength = 100))
+        DT::datatable(
+            data = data_dictionary,
+            options = list(lengthMenu = c(100, 500, 1000, nrow(data_dictionary)), pageLength = 100))
     })
     output$values_dictionary_tab = DT::renderDataTable({
-        DT::datatable(values_dictionary, options = list(lengthMenu = c(100, 500, 1000, nrow(values_dictionary)), pageLength = 100))
+        DT::datatable(
+            data = values_dictionary,
+            options = list(lengthMenu = c(100, 500, 1000, nrow(values_dictionary)), pageLength = 100))
     })
     
     #=========================================================================
     # SECTION TWELVE: Published papers
     output$published_papers = DT::renderDataTable({
-        DT::datatable(published_papers_dat, options = list(lengthMenu = c(5, nrow(published_papers_dat)), pageLength = 100))
+        DT::datatable(
+            data = published_papers_dat, 
+            options = list(lengthMenu = c(5, nrow(published_papers_dat)), pageLength = 100))
     })
     #=========================================================================
     # End server
