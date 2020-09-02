@@ -1,5 +1,5 @@
 ##############################################################################
-# Purpose: POINT data visualisation
+# Purpose: POINT data visualization
 # Author: Phillip Hungerford
 # Date: 2020-06-19
 ##############################################################################
@@ -32,15 +32,15 @@ library(reshape2)
 # functions for plots
 source("functions/utilities.R")
 # 1 - overview
-# 2 - measurs
-source("functions/section_03_plots.R") # 3 - demographics
-source("functions/section_04_plots.R") # 4 - pain
-source("functions/section_05_plots.R") # 5 - physical function
-source("functions/section_06_plots.R") # 6 - treatment
-source("functions/section_07_plots.R") # 7 - quality of life
-source("functions/section_08_plots.R") # 8 - mental health
-source("functions/section_09_plots.R") # 9 - substance use
-source("functions/section_10_plots.R") # 10 - medication diary
+# 2 - measures
+source("functions/s03_demographics.R") # 3 - demographics
+source("functions/s04_pain.R") # 4 - pain
+source("functions/s05_physicalFunction.R") # 5 - physical function
+source("functions/s06_treatment.R") # 6 - treatment
+source("functions/s07_qualityOfLife.R") # 7 - quality of life
+source("functions/s08_mentalHealth.R") # 8 - mental health
+source("functions/s09_substanceUse.R") # 9 - substance use
+source("functions/s10_medicationDiary.R") # 10 - medication diary
 # 11 - data dictionary
 # 12 - published
 # 13 - acknowledgements
