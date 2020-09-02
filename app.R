@@ -858,7 +858,7 @@ server <- function(input, output) {
         pain_bpi_tbl(df=point)
     })
     #=========================================================================
-    # SECTION 05: Physical Function
+    # SECTION 5: Physical Function
     #-------------------------------------------------------------------------
     # Exercise
     ## R1B1: Exercise days
@@ -886,7 +886,7 @@ server <- function(input, output) {
         pf_slp(df=point)
     }, height = plot_height)
     #=========================================================================
-    # SECTION 06: Treatment
+    # SECTION 6: Treatment
     #-------------------------------------------------------------------------
     # ROW 3: Drug abuse and dependence
     output$tmt_r2b1 <- renderPlot({
@@ -897,7 +897,7 @@ server <- function(input, output) {
         tmt_orbit_plot_2(df = point, variables = input$tmt_orbit_select)
     }, height = plot_height)
     #=========================================================================
-    # SECTION 07: Quality of life
+    # SECTION 7: Quality of life
     #-------------------------------------------------------------------------
     # PLOT 1: Quality of life
     output$qol_q1 <- renderPlot({
@@ -910,7 +910,7 @@ server <- function(input, output) {
     }, height = plot_height)
     
     #=========================================================================
-    # SECTION 08: Mental Health
+    # SECTION 8: Mental Health
     #-------------------------------------------------------------------------
     ## ROW 1 BOX 1: 
     output$mh_r1b1 <- renderPlot({
@@ -923,7 +923,7 @@ server <- function(input, output) {
     }, height = plot_height)
     
     #=========================================================================
-    # SECTION 09: Substance Use
+    # SECTION 9: Substance Use
     #-------------------------------------------------------------------------
     # ROW 1: lifetime and current drug use
     
@@ -981,7 +981,7 @@ server <- function(input, output) {
         ome_summary(point, input$medication)
     })
     #=========================================================================
-    # SECTION ELEVEN: Data Dictionary
+    # SECTION 11: Data Dictionary
     output$data_dictionary_tab = DT::renderDataTable({
         DT::datatable(
             data = data_dictionary,
@@ -994,7 +994,7 @@ server <- function(input, output) {
     })
     
     #=========================================================================
-    # SECTION TWELVE: Published papers
+    # SECTION 12: Published papers
     output$published_papers = DT::renderDataTable({
         DT::datatable(
             data = published_papers_dat, 
