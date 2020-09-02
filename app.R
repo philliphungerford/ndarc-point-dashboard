@@ -374,7 +374,7 @@ ui <- dashboardPage(
                       Pain 2003, 106(3):337–345."),
                     
                     # Display measures table
-                    div(DT::dataTableOutput(outputId = "table_measures", width = '100%', height = 'auto'), style = "font-size: 100%; width: 95%")
+                    div(DT::dataTableOutput(outputId = "table_measures", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
             ),
             #-----------------------------------------------------------------
             # SECTION 3: DEMOGRAPHICS
@@ -538,6 +538,23 @@ ui <- dashboardPage(
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Info boxes for Overview
                     h3("Opioid Related Behaviours In Treatment (ORBIT)"),
+                    
+                    # Description of ORBIT
+                    p("The Opioid-Related Behaviours In Treatment (ORBIT) scale 
+                    is brief, reliable and validated for use in diverse patient
+                    groups receiving opioids. The ORBIT has potential 
+                    applications as a checklist to prompt clinical discussions 
+                    and as a tool to quantify aberrant behaviour and assess
+                    change over time."),
+                    
+                    # SOURCE for ORBIT
+                    p("SOURCE: Larance B, Bruno R, Lintzeris N, et al.
+                      Development of a brief tool for monitoring aberrant
+                      behaviours among patients receiving long-term opioid 
+                      therapy: The Opioid-Related Behaviours In Treatment 
+                      (ORBIT) scale. Drug and Alcohol Dependence 2016; 
+                      159: 42-52"),
+                    
                     fluidRow(
                         # BOX 6: Opioid dependence plot
                         box(
