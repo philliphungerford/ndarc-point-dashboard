@@ -46,20 +46,16 @@ source("functions/section_10_plots.R") # 10 - medication diary
 # 13 - acknowledgements
 ##############################################################################
 # load data
-point_master <- read.csv("data/point-v0.9.5.csv", na.strings=c("", " "), encoding='UTF-8')
-names(point_master)[names(point_master) == "X.U.FEFF.Participant_ID"] <- "Participant_ID"
+point_master <- read.csv("data/point-v1.0.0.csv", na.strings=c("", " "), encoding='UTF-8', stringsAsFactors = TRUE)
+table_measures <- read.csv("data/20200825-measures-converted.csv", fileEncoding='UTF-8-BOM') # Section 2: measures
+data_dictionary <- read.csv("data/point-v1.0.0-dictionary.csv") # section 10: data dictionary
+values_dictionary <- read.csv("data/point-v1.0.0-dictionary-values.csv", na.strings=c("")) # section 10: data dictionary
+published_papers_dat <- read.csv("data/published-year-title.csv", fileEncoding = 'UTF-8-BOM') # section 12: published papers
+
+# clean data
+##############################################################################
 point <- subset(point_master, followup=='followed up') # remove attrition N=7578
-
-# SECTION 2: Measures
-table_measures <- read.csv("data/20200825-measures-converted.csv", fileEncoding='UTF-8-BOM')
-    
-# SECTION 10: Data dictionary
-data_dictionary <- read.csv("data/point-v0.9.5-dictionary.csv")
-values_dictionary <- read.csv("data/point-v0.9.5-dictionary-values.csv", na.strings=c(""))
-
-# SECTION 12: Published
-published_papers_dat <- read.csv("data/published-year-title.csv", fileEncoding = 'UTF-8-BOM')
-
+#names(point_master)[names(point_master) == "X.U.FEFF.Participant_ID"] <- "Participant_ID"
 ##############################################################################
 # fine tune parameters for each tab
 # SECTION 3: Demographics (use class() to check dtype)
@@ -150,7 +146,7 @@ ui <- dashboardPage(
     dashboardBody(
         tabItems(
             #-----------------------------------------------------------------
-            # SECTION ONE: Overview
+            # SECTION 1: Overview
             tabItem(tabName = "overview",
                     #h1("The Pain and Opioids In Treatment (POINT) study"),
                     div(img(src='point_logo.jpg', align = "center"), style="text-align: center;"),
@@ -338,7 +334,7 @@ ui <- dashboardPage(
                       Toxicology, 15; 17")
             ),
             #-----------------------------------------------------------------
-            # SECTION TWO: MEASURES
+            # SECTION 2: MEASURES
             tabItem(tabName = "measures",
                     h2("Measures"),
                     p("Here are the measures, tools, domains and time-points for
@@ -381,10 +377,10 @@ ui <- dashboardPage(
                     div(DT::dataTableOutput(outputId = "table_measures", width = '100%', height = 'auto'), style = "font-size: 100%; width: 95%")
             ),
             #-----------------------------------------------------------------
-            # SECTION THREE: DEMOGRAPHICS
+            # SECTION 3: DEMOGRAPHICS
             tabItem(tabName = "demographics",
                     h2("Demographics"),
-                    
+                    p("Demographic variables were collected at baseline."),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     fluidRow(
                         # box 1 and 2 for selection
@@ -436,9 +432,11 @@ ui <- dashboardPage(
                     
             ),
             #-----------------------------------------------------------------
-            # SECTION FOUR: PAIN
+            # SECTION 4: PAIN
             tabItem(tabName = "pain",
                     h2("Pain Measures"),
+                    p("Here you can find chronic conditions at baseline, past 12
+                      months and BPI scores"),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Info boxes for Overview
                     fluidRow(
@@ -470,10 +468,11 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION FIVE: PHYSICAL FUNCTION
+            # SECTION 5: PHYSICAL FUNCTION
             tabItem(tabName = "physical",
                     h2("Physical Function Measures"),
-                    
+                    p("Here you can find measures relating to exercise, falls, 
+                      sleep, and coping and pain (PSEQ)"),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Top Row: Exercise 
                     h3("Exercise"),
@@ -522,9 +521,20 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION SIX: TREATMENT
+            # SECTION 6: TREATMENT
             tabItem(tabName = "treatment",
                     h2("Treatment Received"),
+                    p("Here you can find measures relating to Aberrant opioid medication-related behaviours (ORBIT)"),
+                    
+                    # NEED TO ADD
+                      #Opioid Difficulties (PODS), 
+                      #Barriers to treatment, 
+                      #Reasons for discontinuance of opioids,
+                      #Side-effects of opioid medication,
+                      #Beliefs about medicines,
+                      #Perceived effect of treatment. 
+                    
+                    p("Note: The past week medication diary has been moved to it's own tab"),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Info boxes for Overview
                     h3("Opioid Related Behaviours In Treatment (ORBIT)"),
@@ -553,7 +563,7 @@ ui <- dashboardPage(
                     
             ),
             #-----------------------------------------------------------------
-            # SECTION SEVEN: QOL
+            # SECTION 7: QOL
             tabItem(tabName = "qol",
                     h2("Quality of Life Assessment"),
                     p("The following questions ask how you feel about your 
@@ -582,9 +592,21 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION EIGHT: MENTAL HEALTH
+            # SECTION 8: MENTAL HEALTH
             tabItem(tabName = "mental_health",
                     h2("Mental Health"),
+                    p("Here you can find measures relating to mental health such as, 
+                      lifetime reported conditions, 
+                      past 12 month conditions"),
+                    
+                    # NEED TO ADD: 
+                    ## Depression (PHQ9)
+                    ## Anxiety (GAD)
+                    ## SIAS
+                    ## Social phobia scale (SPS)
+                    ## Agoraphobia
+                    ## PTSD
+                    ## Child abuse (maybe not because this is sensitive)
                     fluidRow(
                         
                         # BOX 1: Ever used (stacked plot of yes/no for each drug)
@@ -601,10 +623,12 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION NINE: SUBSTANCE
+            # SECTION 9: SUBSTANCE USE
             tabItem(tabName = "substance_use",
                     h2("Substance Use"),
-                    
+                    p("Here you can find measures relating to lifetime and current drug use,
+                      Opioid abuse and dependence,
+                      baseline abuse and dependence for other drugs"),
                     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     # Top Row: Life time
                     h3("Lifetime and current drug use"),
@@ -664,7 +688,7 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION TEN: MEDICATION DIARY
+            # SECTION 10: MEDICATION DIARY
             tabItem(tabName = "med_diary",
                     h2("Medication Diary"),
                     p("At each wave, a seven-day medication diary collected 
@@ -681,7 +705,7 @@ ui <- dashboardPage(
                     fluidRow(
                         # box 3 is the medication selection
                         box(
-                            style = "height:110px",
+                            style = "height:120px",
                             title = "Select Medication",
                             "Select a medication from", br(), "participant's medication diary.",
                             selectInput("medication", "Variable:", medications))
@@ -716,10 +740,11 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # Eleventh tab content: Data Dictionary
+            # SECTION 11: Data Dictionary
             tabItem(tabName = "dictionary",
                     h2("POINT Data Dictionary"),
-                    
+                    p("Here you can find the data dictionary, with variables, 
+                      labels, data types, years collected and values."),
                     # have two sub-tabs within the data dictionary tab
                     tabsetPanel(
                                 tabPanel("Data Dictionary", DT::dataTableOutput("data_dictionary_tab")), 
@@ -727,14 +752,15 @@ ui <- dashboardPage(
                     ),
             ),
             #-----------------------------------------------------------------
-            # Twelfth tab content
+            # SECTION 12: Published papers
             tabItem(tabName = "published",
                     h2("Published Papers"),
+                    p("Here are the current published papers as of 2020-08-25."),
                     # Display published papers table
                     DT::dataTableOutput("published_papers")
             ),
             #-----------------------------------------------------------------
-            # Thirteenth tab content
+            # SECTION 13: Acknowledgements
             tabItem(tabName = "acknowledgements",
                     h2("Acknowledgements"),
                     p("A special thanks to all of the research assistants, chief
