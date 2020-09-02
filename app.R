@@ -745,10 +745,17 @@ ui <- dashboardPage(
                     h2("POINT Data Dictionary"),
                     p("Here you can find the data dictionary, with variables, 
                       labels, data types, years collected and values."),
+                    
                     # have two sub-tabs within the data dictionary tab
                     tabsetPanel(
-                                tabPanel("Data Dictionary", DT::dataTableOutput("data_dictionary_tab")), 
-                                tabPanel("Variable Values", DT::dataTableOutput("values_dictionary_tab"))
+                                tabPanel("Data Dictionary", 
+                                         div(DT::dataTableOutput(outputId = "data_dictionary_tab", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
+                                         ), 
+                                tabPanel("Variable Values", 
+                                         div(DT::dataTableOutput(outputId = "values_dictionary_tab", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
+                                         )
+                                
+                                
                     ),
             ),
             #-----------------------------------------------------------------
