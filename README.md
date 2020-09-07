@@ -87,6 +87,16 @@ This section showcases the published papers relating to the POINT dataset.
 ### 13. Acknowledgements
 The acknowledgments section pays acknowledgement to those who have contributed to the POINT study. I have attached an image which was possible by creating a directory called 'www' and storing the image there. 
 
-## Conclusion
+## Organisation
+As the dashboard is made up of tabs, functions and data are nested within tabs. The nesting is outlined below:
 
-*Note: This is an un-finished pre-print demonstration. Do not use cite results in screenshots as they are subject to change. 
+Dashboard
+  -> Tab (Measure)
+    -> Section (Category)
+      -> Function (plot / table / data)
+      
+Therefore the names should be tab_section_function. E.g. pain_chronicbaseline_plot, pain_chronic12m_plotpain_past12m_plot, pain_past12m_table, pain_past12m_data, pain_past12m_n.
+
+Each tab is organised into its own R script (e.g. tab_pain, tab_demographics, tab_medicationdiary). 
+
+*Note: This is an un-finished pre-print demonstration. Do not use/cite results in screenshots as they are subject to change. 
