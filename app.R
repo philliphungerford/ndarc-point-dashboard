@@ -28,37 +28,30 @@ library(DT) # for displaying tables
 library(ggplot2)
 library(data.table)
 library(reshape2)
+
+##############################################################################
+# load data
+load('data/processed/test_all.RData')
 ##############################################################################
 # functions for plots
 source("functions/utilities.R")
 # 1 - overview
 # 2 - measures
-source("functions/s03_demographics.R") # 3 - demographics
-source("functions/s04_pain.R") # 4 - pain
-source("functions/s05_physicalFunction.R") # 5 - physical function
-source("functions/s06_treatment.R") # 6 - treatment
-source("functions/s07_qualityOfLife.R") # 7 - quality of life
-source("functions/s08_mentalHealth.R") # 8 - mental health
-source("functions/s09_substanceUse.R") # 9 - substance use
-source("functions/s10_medicationDiary.R") # 10 - medication diary
+source("functions/tab_demographics.R") # 3 - demographics
+source("functions/tab_pain.R") # 4 - pain
+source("functions/tab_physicalFunction.R") # 5 - physical function
+source("functions/tab_treatment.R") # 6 - treatment
+source("functions/tab_qualityOfLife.R") # 7 - quality of life
+source("functions/tab_mentalHealth.R") # 8 - mental health
+source("functions/tab_substanceUse.R") # 9 - substance use
+source("functions/tab_medicationDiary.R") # 10 - medication diary
 # 11 - data dictionary
 # 12 - published
-# 13 - acknowledgements
-##############################################################################
-# load data
-point_master <- read.csv("data/point-v1.0.0.csv", na.strings=c("", " "), encoding='UTF-8', stringsAsFactors = TRUE)
-table_measures <- read.csv("data/20200825-measures-converted.csv", fileEncoding='UTF-8-BOM') # Section 2: measures
-data_dictionary <- read.csv("data/point-v1.0.0-dictionary.csv") # section 10: data dictionary
-values_dictionary <- read.csv("data/point-v1.0.0-dictionary-values.csv", na.strings=c("")) # section 10: data dictionary
-published_papers_dat <- read.csv("data/published-year-title.csv", fileEncoding = 'UTF-8-BOM') # section 12: published papers
+# 13 - acknowledgments
 
-# clean data
-##############################################################################
-point <- subset(point_master, followup=='followed up') # remove attrition N=7578
-#names(point_master)[names(point_master) == "X.U.FEFF.Participant_ID"] <- "Participant_ID"
 ##############################################################################
 # fine tune parameters for each tab
-# SECTION 3: Demographics (use class() to check dtype)
+# TAB 3: Demographics (use class() to check dtype)
 demographic_int <- c("Age" = "age", # int
                       "Height" = "height", # int
                       "Weight" =  "weight", # int
@@ -76,7 +69,7 @@ demographic_fac <- c("Sex" = "sex", # fact
                      "Accomodation status" = "accom" # fac
 )
 
-# SECTION 06: Treatment
+# TAB 06: Treatment
 ## Orbit
 orbit_items <- c(
     'Q1. Asked my doctor for an increase in my prescribed dose' = 'orb_1',
@@ -91,20 +84,23 @@ orbit_items <- c(
     'Q10. Have used my opioid medication for other purposes' = 'orb_10'
 )
 
-# SECTION 09: SUbstance Use
+# TAB 09: SUbstance Use
 # substance use options
-substance_use_options <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug and alcohol abuse dependence"]
-substance_use_options <- as.character(substance_use_options)
-substance_use_options <- as.factor(unique(substance_use_options)) # 184 options
+substance_use_options <- dictionary_dictionary_data$Variable[dictionary_dictionary_data$Subcategory == "Drug and alcohol abuse dependence"]
+substance_use_options <- substance_use_options[!is.na(substance_use_options)]
 
-# SECTION 10: Medication diary
+# find the values that start with num, e.g. num_lifetime_S8_opioids (not usefule here)
+idx <- grep("num_", substance_use_options, value = T) # n = 5
+substance_use_options <- substance_use_options[!(substance_use_options %in% idx)] # n = 161
+
+# TAB 10: Medication diary
 # Medication vars 
-medications <- data_dictionary$Variable[data_dictionary$Subcategory == "Drug"]
+medications <- dictionary_dictionary_data$Variable[dictionary_dictionary_data$Subcategory == "Drug"]
 medications <- as.character(medications)
 medications <- as.factor(unique(medications)) # 187 drugs
 
-# SECTION 11 : Data Dictionary
-values_dictionary$Variable <- zoo::na.locf(values_dictionary$Variable)
+# TAB 11 : Data Dictionary
+dictionary_values_data$Variable <- zoo::na.locf(dictionary_values_data$Variable)
 
 # Parameters
 box_height = "height:600px"
@@ -112,7 +108,7 @@ plot_height = 400
 select_height = "height:100px"
 
 ##############################################################################
-# SECTION 1: USER INTERFACE
+# TAB 1: USER INTERFACE
 ##############################################################################
 # Define UI for application that draws a histogram
 ui <- dashboardPage(
@@ -146,7 +142,7 @@ ui <- dashboardPage(
     dashboardBody(
         tabItems(
             #-----------------------------------------------------------------
-            # SECTION 1: Overview
+            # TAB 1: Overview
             tabItem(tabName = "overview",
                     #h1("The Pain and Opioids In Treatment (POINT) study"),
                     div(img(src='point_logo.jpg', align = "center"), style="text-align: center;"),
@@ -334,7 +330,7 @@ ui <- dashboardPage(
                       Toxicology, 15; 17")
             ),
             #-----------------------------------------------------------------
-            # SECTION 2: MEASURES
+            # TAB 2: MEASURES
             tabItem(tabName = "measures",
                     h2("Measures"),
                     p("Here are the measures, tools, domains and time-points for
@@ -374,10 +370,10 @@ ui <- dashboardPage(
                       Pain 2003, 106(3):337–345."),
                     
                     # Display measures table
-                    div(DT::dataTableOutput(outputId = "table_measures", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
+                    div(DT::dataTableOutput(outputId = "measures_data", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
             ),
             #-----------------------------------------------------------------
-            # SECTION 3: DEMOGRAPHICS
+            # TAB 3: DEMOGRAPHICS
             tabItem(tabName = "demographics",
                     h2("Demographics"),
                     p("Demographic variables were collected at baseline."),
@@ -432,7 +428,7 @@ ui <- dashboardPage(
                     
             ),
             #-----------------------------------------------------------------
-            # SECTION 4: PAIN
+            # TAB 4: PAIN
             tabItem(tabName = "pain",
                     h2("Pain Measures"),
                     p("Here you can find chronic conditions at baseline, past 12
@@ -468,7 +464,7 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION 5: PHYSICAL FUNCTION
+            # TAB 5: PHYSICAL FUNCTION
             tabItem(tabName = "physical",
                     h2("Physical Function Measures"),
                     p("Here you can find measures relating to exercise, falls, 
@@ -521,7 +517,7 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION 6: TREATMENT
+            # TAB 6: TREATMENT
             tabItem(tabName = "treatment",
                     h2("Treatment Received"),
                     p("Here you can find measures relating to Aberrant opioid medication-related behaviours (ORBIT)"),
@@ -580,7 +576,7 @@ ui <- dashboardPage(
                     
             ),
             #-----------------------------------------------------------------
-            # SECTION 7: QOL
+            # TAB 7: QOL
             tabItem(tabName = "qol",
                     h2("Quality of Life Assessment"),
                     p("The following questions ask how you feel about your 
@@ -609,7 +605,7 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION 8: MENTAL HEALTH
+            # TAB 8: MENTAL HEALTH
             tabItem(tabName = "mental_health",
                     h2("Mental Health"),
                     p("Here you can find measures relating to mental health such as, 
@@ -640,7 +636,7 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION 9: SUBSTANCE USE
+            # TAB 9: SUBSTANCE USE
             tabItem(tabName = "substance_use",
                     h2("Substance Use"),
                     p("Here you can find measures relating to lifetime and current drug use,
@@ -705,7 +701,7 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION 10: MEDICATION DIARY
+            # TAB 10: MEDICATION DIARY
             tabItem(tabName = "med_diary",
                     h2("Medication Diary"),
                     p("At each wave, a seven-day medication diary collected 
@@ -757,7 +753,7 @@ ui <- dashboardPage(
                     )
             ),
             #-----------------------------------------------------------------
-            # SECTION 11: Data Dictionary
+            # TAB 11: Data Dictionary
             tabItem(tabName = "dictionary",
                     h2("POINT Data Dictionary"),
                     p("Here you can find the data dictionary, with variables, 
@@ -766,17 +762,17 @@ ui <- dashboardPage(
                     # have two sub-tabs within the data dictionary tab
                     tabsetPanel(
                                 tabPanel("Data Dictionary", 
-                                         div(DT::dataTableOutput(outputId = "data_dictionary_tab", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
+                                         div(DT::dataTableOutput(outputId = "s11_1_data_tab", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
                                          ), 
                                 tabPanel("Variable Values", 
-                                         div(DT::dataTableOutput(outputId = "values_dictionary_tab", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
+                                         div(DT::dataTableOutput(outputId = "s11_2_data_tab", width = '100%', height = 'auto'), style = "font-size: 80%; width: 100%")
                                          )
                                 
                                 
                     ),
             ),
             #-----------------------------------------------------------------
-            # SECTION 12: Published papers
+            # TAB 12: Published papers
             tabItem(tabName = "published",
                     h2("Published Papers"),
                     p("Here are the current published papers as of 2020-08-25."),
@@ -784,7 +780,7 @@ ui <- dashboardPage(
                     DT::dataTableOutput("published_papers")
             ),
             #-----------------------------------------------------------------
-            # SECTION 13: Acknowledgements
+            # TAB 13: Acknowledgements
             tabItem(tabName = "acknowledgements",
                     h2("Acknowledgements"),
                     p("A special thanks to all of the research assistants, chief
@@ -820,7 +816,7 @@ ui <- dashboardPage(
 ) # dashboard page
 
 ##############################################################################
-# SECTION 2: SERVER
+# TAB 2: SERVER
 ##############################################################################
 # Define server logic required to draw a histogram
 server <- function(input, output) {
@@ -831,159 +827,159 @@ server <- function(input, output) {
     set.seed(122)
     
     #=========================================================================
-    # SECTION 2: MEASURES
-    output$table_measures = DT::renderDataTable({
-        DT::datatable(table_measures, options = list(lengthMenu = c(10, 20, 43), pageLength = 43))
+    # TAB 2: MEASURES
+    output$measures_data = DT::renderDataTable({
+        DT::datatable(measures_data, options = list(lengthMenu = c(10, 20, 43), pageLength = 43))
     })
     
     #=========================================================================
-    # SECTION 3: Demographics
+    # TAB 3: Demographics
     #-------------------------------------------------------------------------
     # PLOT 1: Density plot
     output$demographic_density <- renderPlot({
-        density_plot(df = point, variable = input$demographic_int_selection)
+        density_plot(df = demographics_data, variable = input$demographic_int_selection)
     })
     #-------------------------------------------------------------------------
     # PLOT 2: Donut
     output$demographic_donut <- renderPlot({
-        donut_plot(df = point, variable = input$demographic_fac_selection)
+        donut_plot(df = demographics_data, variable = input$demographic_fac_selection)
     })
     #-------------------------------------------------------------------------
     # PLOT 3: Histogram
     output$demographic_histogram <- renderPlot({
-        histogram_plot(df = point, variable = input$demographic_int_selection)
+        histogram_plot(df = demographics_data, variable = input$demographic_int_selection)
     })
     #-------------------------------------------------------------------------
     # PLOT 4: Summary of pie chart
     output$demographic_sum <- renderTable({
-        donut_summary(point, input$demographic_fac_selection)
+        donut_summary(df = demographics_data, input$demographic_fac_selection)
     })
     
     #=========================================================================
-    # SECTION 4: Pain
+    # TAB 4: Pain
     #-------------------------------------------------------------------------
     # PLOT 1: BASELINE CHRONIC PAIN CONDITIONS
     output$pain_baseline <- renderPlot({
-        pain_baseline_plot(df=point)
+        pain_baseline_plot(pain_baseline_data)
     }, height = plot_height)
     
     # PLOT 2: PAST 12m CHRONIC PAIN CONDITIONS
     output$pain_past12m <- renderPlot({
-        pain_past12m_plot(df=point)
+        pain_past12m_plot(pain_past12m_data)
     }, height = plot_height)
     
     # PLOT 3: BPI plot
     output$pain_bpi_p <- renderPlot({
-        pain_bpi_plot(df=point)
+        pain_bpi_plot(pain_bpi_data)
     }, height = plot_height)
     
     # Box 4: BPI summary
     output$pain_bpi_t <- renderTable({
-        pain_bpi_tbl(df=point)
+        pain_bpi_tbl(pain_bpi_data)
     })
     #=========================================================================
-    # SECTION 5: Physical Function
+    # TAB 5: Physical Function
     #-------------------------------------------------------------------------
     # Exercise
     ## R1B1: Exercise days
     output$pf_r1b1 <- renderPlot({
-        pf_ex_days(df=point)
+        pf_ex_days(pf_ex_days_data)
     }, height = plot_height)
     
     ## R1B2: Exercise intensity
     output$pf_r1b2 <- renderPlot({
-        pf_ex_in(df=point)
+        pf_ex_in(pf_ex_in_data)
     }, height = plot_height)
    
      ## R2B1: Exercise type
     output$pf_r2b1 <- renderPlot({
-        pf_ex_tp(df=point)
+        pf_ex_tp(pf_ex_tp_data)
     }, height = plot_height)
     
     ## R3B1: PSEQ
     output$pf_r3b1 <- renderPlot({
-        pf_pseq(df=point)
+        pf_pseq(pf_pseq_data)
     }, height = plot_height)
     
     ## R3B2: Sleep
     output$pf_r3b2 <- renderPlot({
-        pf_slp(df=point)
+        pf_slp(pf_slp_data)
     }, height = plot_height)
     #=========================================================================
-    # SECTION 6: Treatment
+    # TAB 6: Treatment
     #-------------------------------------------------------------------------
     # ROW 3: Drug abuse and dependence
     output$tmt_r2b1 <- renderPlot({
-        tmt_orbit_plot_1(df = point, variables = input$tmt_orbit_select)
+        tmt_orbit_plot(tmt_orbit_data, exclude_never=FALSE, variables = input$tmt_orbit_select)
     }, height = plot_height)
     
     output$tmt_r2b2 <- renderPlot({
-        tmt_orbit_plot_2(df = point, variables = input$tmt_orbit_select)
+        tmt_orbit_plot(tmt_orbit_data, exclude_never=TRUE, variables = input$tmt_orbit_select)
     }, height = plot_height)
     #=========================================================================
-    # SECTION 7: Quality of life
+    # TAB 7: Quality of life
     #-------------------------------------------------------------------------
     # PLOT 1: Quality of life
     output$qol_q1 <- renderPlot({
-        qol_q1_plot(df=point)
+        qol_q1_plot(qol_q1_data, qol_q1_n)
     }, height = plot_height)
     
     # PLOT 2: Health satisfaction
     output$qol_q2 <- renderPlot({
-        qol_q2_plot(df=point)
+        qol_q2_plot(qol_q2_data, qol_q2_n)
     }, height = plot_height)
     
     #=========================================================================
-    # SECTION 8: Mental Health
+    # TAB 8: Mental Health
     #-------------------------------------------------------------------------
     ## ROW 1 BOX 1: 
     output$mh_r1b1 <- renderPlot({
-        mh_ever_plot(point)
+        mh_ever_plot(mh_ever_plot_data)
     }, height = plot_height)
     
     ## ROW 1 BOX 3: Past 12m 
     output$mh_r1b2 <- renderPlot({
-        mh_drug_trend_plot(point)
+        mh_drug_trend_plot(mh_drug_trend_data, mh_drug_trend_n)
     }, height = plot_height)
     
     #=========================================================================
-    # SECTION 9: Substance Use
+    # TAB 9: Substance Use
     #-------------------------------------------------------------------------
     # ROW 1: lifetime and current drug use
     
     ## ROW 1 BOX 1: 
     output$substance_use_r1b1 <- renderPlot({
-        su_ever_plot(point)
+        su_ever_plot(su_ever_plot_data)
     }, height = plot_height)
     
     ## ROW 1 BOX 3: Past 12m 
     output$substance_use_r1b2 <- renderPlot({
-        su_drug_trend_plot(point)
+        su_drug_trend_plot(su_drug_trend_plot_data)
     }, height = plot_height)
     
     
     # ROW 2: Opioid dependence
     
     output$substance_use_r2b1 <- renderPlot({
-        su_proportion_plot(point, 'Pharm_Opioids_Dep_ICD10', outcome = "Yes")
+        su_dep_proportion_plot(su_dep_proportion_plot_data)
     }, height = plot_height)
     
     output$substance_use_r2b2 <- renderTable({
-        su_proportion_tbl(point, 'Pharm_Opioids_Dep_ICD10', outcome = "Yes")
+        su_dep_proportion_plot_data
     })
     
     # ROW 3: Drug abuse and dependence
     output$substance_use_r3b2 <- renderPlot({
-        su_plot(point, input$substance_use_select)
+        su_plot(su_plot_data, input$substance_use_select)
     }, height = plot_height)
     
     output$substance_use_r3b3 <- renderTable({
-        table(point[which(point$time==0), input$substance_use_select])
+        table(su_plot_data[, input$substance_use_select])
     })
     
     
     #=========================================================================
-    # SECTION 10: medication diary
+    # TAB 10: medication diary
     #-------------------------------------------------------------------------
     # Proportions Summary
     output$medication_proportions <- renderTable({
@@ -1005,24 +1001,24 @@ server <- function(input, output) {
         ome_summary(point, input$medication)
     })
     #=========================================================================
-    # SECTION 11: Data Dictionary
-    output$data_dictionary_tab = DT::renderDataTable({
+    # TAB 11: Data Dictionary
+    output$s11_1_data_tab = DT::renderDataTable({
         DT::datatable(
-            data = data_dictionary,
-            options = list(lengthMenu = c(100, 500, 1000, nrow(data_dictionary)), pageLength = 100))
+            data = dictionary_dictionary_data,
+            options = list(lengthMenu = c(100, 500, 1000, nrow(dictionary_dictionary_data)), pageLength = 100))
     })
-    output$values_dictionary_tab = DT::renderDataTable({
+    output$s11_2_data_tab = DT::renderDataTable({
         DT::datatable(
-            data = values_dictionary,
-            options = list(lengthMenu = c(100, 500, 1000, nrow(values_dictionary)), pageLength = 100))
+            data = dictionary_values_data,
+            options = list(lengthMenu = c(100, 500, 1000, nrow(dictionary_values_data)), pageLength = 100))
     })
     
     #=========================================================================
-    # SECTION 12: Published papers
+    # TAB 12: Published papers
     output$published_papers = DT::renderDataTable({
         DT::datatable(
-            data = published_papers_dat, 
-            options = list(lengthMenu = c(5, nrow(published_papers_dat)), pageLength = 100))
+            data = published_data, 
+            options = list(lengthMenu = c(5, nrow(published_data)), pageLength = 100))
     })
     #=========================================================================
     # End server
@@ -1030,7 +1026,7 @@ server <- function(input, output) {
 }
 
 ##############################################################################
-# SECTION 3: RUN APPLICATION
+# TAB 3: RUN APPLICATION
 ##############################################################################
 shinyApp(ui = ui, server = server)
 ##############################################################################

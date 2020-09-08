@@ -6,15 +6,32 @@ This is for tracking what I have to do and what I have done on a given day ('rel
 
 ### To do:
 - [ ] Summarize data for security
+  - [ ] Overview
+  - [x] Measures
+  - [x] Demographics
+  - [x] Pain
+  - [x] Physical Function
+  - [ ] Treatment
+  - [x] Quality of life
+  - [x] Mental Health
+  - [ ] Substance Use
+  - [x] Medication Diary
+  - [x] Data dictionary / values
+  - [x] Published
+  - [x] Acknowledgements
 - [ ] Publish / host test
+
 
 ### Completed:
 - [x] Fix data dictionary display, similar to measures fix
 - [x] Draft design of dashboard
 - [x] Create app layout and functions
 
+### 2020-09-08
+- Changed file names according to a convention
+- Created the 'summarise_data.R' script which is now a pre-requisite to run for the dashboard.
 
-### 2020-09-01
+### 2020-09-02
 
 - Added a small amount of detailing explaining what is available on each tab after each title. 
 - Fixed shape of data dictionary and its values by making the font smaller
