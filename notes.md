@@ -15,7 +15,7 @@ This is for tracking what I have to do and what I have done on a given day ('rel
   - [x] Quality of life
   - [x] Mental Health
   - [x] Substance Use
-  - [] Medication Diary
+  - [ ] Medication Diary
   - [x] Data dictionary / values
   - [x] Published
   - [x] Acknowledgements
