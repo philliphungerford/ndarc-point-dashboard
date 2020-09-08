@@ -6,16 +6,16 @@ This is for tracking what I have to do and what I have done on a given day ('rel
 
 ### To do:
 - [ ] Summarize data for security
-  - [ ] Overview
+  - [x] Overview
   - [x] Measures
   - [x] Demographics
   - [x] Pain
   - [x] Physical Function
-  - [ ] Treatment
+  - [x] Treatment
   - [x] Quality of life
   - [x] Mental Health
-  - [ ] Substance Use
-  - [x] Medication Diary
+  - [x] Substance Use
+  - [] Medication Diary
   - [x] Data dictionary / values
   - [x] Published
   - [x] Acknowledgements
@@ -29,7 +29,8 @@ This is for tracking what I have to do and what I have done on a given day ('rel
 
 ### 2020-09-08
 - Changed file names according to a convention
-- Created the 'summarise_data.R' script which is now a pre-requisite to run for the dashboard.
+- Created the 'prepare_data.R' script which is now a pre-requisite to run for the dashboard.
+- Completed preparation of data, just need to summarise medication diary data.
 
 ### 2020-09-02
 
