@@ -1,43 +1,8 @@
 # ndarc-point-dashboard
 A shiny app dashboard that shows a novel way of presenting longitudinal data. 
 
-## Notes:
-This is for tracking what I have to do and what I have done on a given day ('release-notes' if you will).
-
-## Tasks:
-
-### To do:
-- [ ] Summarize data for security
-- [ ] Publish / host test
-
-### Completed:
-- [x] Fix data dictionary display, similar to measures fix
-- [x] Draft design of dashboard
-- [x] Create app layout and functions
-
-
-### 2020-09-02
-
-- Added a small amount of detailing explaining what is available on each tab after each title. 
-- Fixed shape of data dictionary and its values by making the font smaller
-- Added breif explanation of ORBIT with reference for ORBIT plots.
-
-### 2020-08-26
-
-- Created notes document to track what I have been doing and what I need to do for this dashboard. Added overall to do's to keep track of what I need to do. Updated hyperlinks in **Acknowledgements** using:
-   
-<pre><code>p("For more details about the POINT study visit: ", a("POINT study details", href="https://ndarc.med.unsw.edu.au/project/point-study-pain-and-opioids-treatment"))
-</code></pre>
-
-- Also updated the overview with more value boxes and POINT image.
-
-### 2020-08-25
-
-- Noticed issues with measures table extending and being cut-off in the browser. Adjusted the size of the table outputs to fix this. 
-
-# OVERVIEW
 ## Introduction
-This shiny app dashboard demonstrates a novel way to present your data to the world. This dashboard is based on a six year prospective study of those using pharmaceutical opioids to treat chronic non-cancer pain. 
+This shiny app dashboard demonstrates a novel way to present your data to the world. This dashboard is based on a six year prospective study of those using pharmaceutical opioids to treat chronic non-cancer pain.*
 
 ## Sections
 The POINT project had distinct questions relating to various components of the participant's life. These were sectioned into separate tabs for exploration. 
@@ -122,4 +87,16 @@ This section showcases the published papers relating to the POINT dataset.
 ### 13. Acknowledgements
 The acknowledgments section pays acknowledgement to those who have contributed to the POINT study. I have attached an image which was possible by creating a directory called 'www' and storing the image there. 
 
-## Conclusion
+## Organisation
+As the dashboard is made up of tabs, functions and data are nested within tabs. The nesting is outlined below:
+
+Dashboard
+  -> Tab (Measure)
+    -> Section (Category)
+      -> Function (plot / table / data)
+      
+Therefore the names should be tab_section_function. E.g. pain_chronicbaseline_plot, pain_chronic12m_plot, pain_past12m_plot, pain_past12m_table, pain_past12m_data, pain_past12m_n.
+
+Each tab is organised into its own R script (e.g. tab_pain, tab_demographics, tab_medicationdiary). 
+
+*Note: This is an un-finished pre-print demonstration. Do not use/cite results in screenshots as they are subject to change. 
