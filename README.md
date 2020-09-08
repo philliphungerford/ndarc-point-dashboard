@@ -99,4 +99,4 @@ Therefore the names should be tab_section_function. E.g. pain_chronicbaseline_pl
 
 Each tab is organised into its own R script (e.g. tab_pain, tab_demographics, tab_medicationdiary). 
 
-*Note: This is an un-finished pre-print demonstration. Do not use/cite results in screenshots as they are subject to change. 
+*Note: This is an un-finished pre-print demonstration. Do not use/cite results in screenshots as they are subject to change.*
