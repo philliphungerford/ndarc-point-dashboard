@@ -93,15 +93,6 @@ substance_use_options <- substance_use_options[!is.na(substance_use_options)]
 idx <- grep("num_", substance_use_options, value = T) # n = 5
 substance_use_options <- substance_use_options[!(substance_use_options %in% idx)] # n = 161
 
-# TAB 10: Medication diary
-# Medication vars 
-medications <- dictionary_dictionary_data$Variable[dictionary_dictionary_data$Subcategory == "Drug"]
-medications <- as.character(medications)
-medications <- as.factor(unique(medications)) # 187 drugs
-
-# TAB 11 : Data Dictionary
-dictionary_values_data$Variable <- zoo::na.locf(dictionary_values_data$Variable)
-
 # Parameters
 box_height = "height:600px"
 plot_height = 400
@@ -744,12 +735,12 @@ ui <- dashboardPage(
                         box(
                             style = box_height,
                             title = "Mean Oral Morphine Equivalent over study",
-                            plotOutput("medication_ome", height = 250)),
+                            plotOutput("medication_ome_plot", height = 250)),
                         # box 3 is the medication selection
                         box(
                             style = box_height,
                             title = "OME Summary",
-                            tableOutput("medication_ome_summary"))
+                            tableOutput("medication_ome_table"))
                     )
             ),
             #-----------------------------------------------------------------
@@ -983,22 +974,22 @@ server <- function(input, output) {
     #-------------------------------------------------------------------------
     # Proportions Summary
     output$medication_proportions <- renderTable({
-        proportion_make(point, input$medication, outcome = "Yes")
+      medication_proportion_table(medication_proportion_data=medication_proportion_data, variable = input$medication)
     })
     #-------------------------------------------------------------------------
     # Proportion plot
     output$medication_plot <- renderPlot({
-        proportion_plot(point, input$medication, outcome = "Yes")
+      medication_proportion_plot(medication_proportion_data=medication_proportion_data, variable = input$medication)
     }, height = plot_height)
     #-------------------------------------------------------------------------
     # OME plot
-    output$medication_ome <- renderPlot({
-        ome_plot(point, input$medication)
+    output$medication_ome_plot <- renderPlot({
+      medication_ome_plot(medication_ome_data, input$medication)
     }, height = plot_height)
     #-------------------------------------------------------------------------
     # OME Summary
-    output$medication_ome_summary <- renderTable({
-        ome_summary(point, input$medication)
+    output$medication_ome_table <- renderTable({
+      medication_ome_summary(medication_ome_data, input$medication)
     })
     #=========================================================================
     # TAB 11: Data Dictionary

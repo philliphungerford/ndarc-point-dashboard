@@ -9,6 +9,16 @@
 ##############################################################################
 library(dplyr)
 ##############################################################################
+list_to_df <- function(list){
+  require(dplyr)
+  df <- do.call(rbind.data.frame, list)
+  df <- data.table::setDT(df, keep.rownames = TRUE)[]
+  df <- as.data.frame(df)
+  df <- df %>% select(-rn)
+  return(df)
+}
+
+##############################################################################
 # TAB 1: Overview = NOT APPLICABLE
 
 ##############################################################################
@@ -735,6 +745,107 @@ create_su_plot_data <- function(df, var){
 }
 ##############################################################################
 # TAB 10: medication diary # ** Selections may be difficult
+# There are two components of this tab:
+## (1) proportions
+## (2) OME summary
+
+percent_ci <- function(df, variable, outcome="Yes", time_ind=0){
+  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  # PURPOSE:
+  #     Calculate the percent and 95% confidence intervals for a given variable
+  #
+  # INPUTS:
+  #     df: dataframe with variableiables
+  #     variable: variable of which to calculate density plot
+  #
+  # Returns: 
+  #     estimate: the proportion calculated
+  #
+  # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  df <- subset(df, time == time_ind)
+  df <- df[!is.na(df$totalopioiddose), ]
+  # pci <- percent_ci(df, "Male", "T1_sex", outcome="Male")
+  df <- as.data.frame(df)
+  tmp <- df[,variable]
+  
+  # Calculate the p and se
+  observed <- sum(df[, variable] == outcome, na.rm=T)
+  n <- length(tmp)
+  
+  # calculate the proportion
+  p <- ( observed / n) * 100
+  
+  # standard error = proportion of outcome 1 * proportion of outcome 2 / n
+  se <- sqrt(p * (100 - p) / n)
+  
+  ## 2. Create % (95% CI)
+  # return result
+  estimate <- round(p, 2)
+  lower <- round(p - (1.96*se), 2)
+  upper <- round(p + (1.96*se), 2)
+  
+  # conditionals for small numbers
+  if (lower < 0){ lower <- 0 }
+  if (upper > 100){ upper <- 100 }
+  # print results
+  result <- c(estimate, lower, upper, time_ind, observed, n)
+  # return results
+  return(result)
+}
+
+proportion_make <- function(df, variable, outcome = "Yes"){
+  # get complete case data
+  df <- get_complete_case(df = df, variable = 'totalopioiddose')
+  ##############################################################################
+  t0 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=0)
+  t1 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=1)
+  t2 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=2)
+  t3 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=3)
+  t4 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=4)
+  t5 <- percent_ci(df=df, variable=variable,  outcome=outcome, time_ind=5)
+  
+  tall <- as.data.frame(rbind(t0,t1,t2,t3,t4,t5))
+  names(tall)[names(tall) == "V1"] <- 'Proportion'
+  names(tall)[names(tall) == "V2"] <- 'Lower CI'
+  names(tall)[names(tall) == "V3"] <- 'Upper CI'
+  names(tall)[names(tall) == "V4"] <- 'Time'
+  names(tall)[names(tall) == "V5"] <- 'Users'
+  names(tall)[names(tall) == "V6"] <- 'Diaries'
+  
+  # reorder so time is at the front
+  tall <- tall[,c(4,1,2,3,5,6)]
+  tall$Drug <- variable
+  ##############################################################################
+  return(tall)
+}
+
+# medication ome
+medication_ome_data <- function(df, variable){
+  # get complete case data
+  df <- get_complete_case(df = df, variable = 'totalopioiddose')
+  tmp <- df %>% select(time, totalopioiddose, all_of(variable))
+  names(tmp)[names(tmp) == variable] <- 'drug'
+  
+  tmp[,3] <- as.integer(tmp[,3])-1
+  # subset for only those drug users 
+  tmp2 <- subset(tmp, drug == 1)
+  tmp2 <- tmp2[complete.cases(tmp2),]
+  
+  # calculate the mean ome and plot it 
+  t0 <- mean(tmp2$totalopioiddose[which(tmp2$time == 0)], na.rm=T)
+  t1 <- mean(tmp2$totalopioiddose[which(tmp2$time == 1)], na.rm=T)
+  t2 <- mean(tmp2$totalopioiddose[which(tmp2$time == 2)], na.rm=T)
+  t3 <- mean(tmp2$totalopioiddose[which(tmp2$time == 3)], na.rm=T)
+  t4 <- mean(tmp2$totalopioiddose[which(tmp2$time == 4)], na.rm=T)
+  t5 <- mean(tmp2$totalopioiddose[which(tmp2$time == 5)], na.rm=T)
+  
+  time <- c(0:5)
+  means <- c(t0,t1,t2,t3,t4,t5)
+  
+  results <- data.frame(Time = time, OME = means)
+  results$Drug <- variable
+  return(results)
+}
 
 ##############################################################################
 # TAB 11: DICTIONARY = SEE BELOW
@@ -768,8 +879,7 @@ pf_slp_data <- create_pf_slp_data(df=point)
 # apply to all orbit items
 orbit_items <- c('orb_1', 'orb_2', 'orb_3', 'orb_4', 'orb_5', 'orb_6', 'orb_7', 'orb_8', 'orb_9', 'orb_10')
 tmt_orbit_data <- lapply(orbit_items, create_tmt_orbit_data, df=point)
-tmt_orbit_data <- do.call(rbind.data.frame, tmt_orbit_data)
-tmt_orbit_data <- setDT(tmt_orbit_data, keep.rownames = TRUE)[]
+tmt_orbit_data <- list_to_df(tmt_orbit_data)
 
 # QOL 
 qol_q1_data_results <- create_qol_q1_data(df=point)
@@ -807,6 +917,22 @@ su_plot_data <- point %>% select(time, all_of(su_items))
 su_plot_data <- subset(su_plot_data, time == 0)
 
 # MEDICATION DIARY
+## We first need to get the list of medications
+medications <- dictionary_dictionary_data$Variable[dictionary_dictionary_data$Subcategory == "Drug"]
+medications <- as.character(medications)
+medications <- medications[!is.na(medications)]
+
+medication_proportion_data_list <- lapply(medications, proportion_make, df=point) # takes about 5min
+medication_proportion_data <- list_to_df(medication_proportion_data_list) # takes about
+
+# remove rn from data
+#medication_proportion_data <- medication_proportion_data[, c(2,3,4,5,6,7,8)]
+
+# OME DATA
+medication_ome_data_list <- lapply(medications, medication_ome_data, df=point) # takes about 5min
+medication_ome_data <- list_to_df(medication_ome_data_list) # takes about
+
+rm(medication_proportion_data_list, medication_ome_data_list)
 
 # DATA DICTIONARY
 dictionary_dictionary_data <- dictionary

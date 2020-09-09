@@ -5,7 +5,7 @@ This is for tracking what I have to do and what I have done on a given day ('rel
 ## Tasks:
 
 ### To do:
-- [ ] Summarize data for security
+- [x] Summarize data for security
   - [x] Overview
   - [x] Measures
   - [x] Demographics
@@ -15,10 +15,11 @@ This is for tracking what I have to do and what I have done on a given day ('rel
   - [x] Quality of life
   - [x] Mental Health
   - [x] Substance Use
-  - [ ] Medication Diary
+  - [x] Medication Diary
   - [x] Data dictionary / values
   - [x] Published
   - [x] Acknowledgements
+  
 - [ ] Publish / host test
 
 
@@ -26,6 +27,9 @@ This is for tracking what I have to do and what I have done on a given day ('rel
 - [x] Fix data dictionary display, similar to measures fix
 - [x] Draft design of dashboard
 - [x] Create app layout and functions
+
+### 2020-09-09
+- Summarised medication diary data. All summaries complete (for now until I add other plots).
 
 ### 2020-09-08
 - Changed file names according to a convention
